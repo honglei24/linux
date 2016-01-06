@@ -1,6 +1,0 @@
-Dom0は全拠点sr@01011　DomUは全拠点sv@01011(館林だけsopxenもたまにある)
-iRMC　ir@0X011　　　ETERNUS　st!0X011　富士通スイッチ　nt@0X011　Cisco製品　nt!0X011　IPCOM　nt%0X011
-IPCOMはVMのソフトIPCOM(island-fw, dmz-fw, region-fw)も全部nt%0X011ですので
-X　は拠点固有ね
-　拠点固有は
-館林　01011　AU　02011　SG　03011　US 04011　UK 05011 DE 06011 明石07011

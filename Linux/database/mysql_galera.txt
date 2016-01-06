@@ -1,0 +1,218 @@
+一：集群机器介绍
+四台机器：
+1.balance节点安装haproxy和keepalived
+机器名：
+balance01 172.18.48.1
+balance02 172.18.48.2
+2.galera节点安装mysql数据库和galera
+机器名：
+galera01 172.18.48.3
+galera02 172.18.48.4
+操作系统：ubuntu14.04 server64
+
+注：每台机器/etc/hosts上要写上涉及到的所有对应的ip和主机名
+
+二：balance节点安装
+
+balance节点安装配置haproxy和keepalived
+
+1./etc/sysctl.conf添加
+vim /etc/sysctl.conf
+net.ipv4.ip_nonlocal_bind=1
+
+2.加载sysctl.conf
+sysctl -p
+
+3.安装haproxy和keepalived
+apt-get install -y keepalived haproxy
+
+4.创建/var/lib/haproxy
+mkdir /var/lib/haproxy
+
+5.把/var/lib/haproxy权限改为root所有
+chown root:root /var/lib/haproxy/
+
+6.vim /etc/keepalived/keepalived.conf
+balance01添加如下：
+global_defs {
+notification_email {
+root@[YOUR_DOMAIN_NAME]
+}
+notification_email_from keepalived@[YOUR_DOMAIN_NAME]
+smtp_server localhost
+smtp_connect_timeout 30
+router_id balance01
+}
+vrrp_script haproxy {
+script “killall -0 haproxy”
+interval 2
+weight 2
+}
+vrrp_instance 50 {
+virtual_router_id 50
+advert_int 1
+priority 101
+state MASTER
+interface eth0
+virtual_ipaddress {
+172.18.48.20 dev eth0
+}
+track_script {
+haproxy
+}
+}
+
+balance02如下：
+global_defs {
+notification_email {
+root@[YOUR_DOMAIN_NAME]
+}
+notification_email_from keepalived@[YOUR_DOMAIN_NAME]
+smtp_server localhost
+smtp_connect_timeout 30
+router_id balance02
+}
+vrrp_script haproxy {
+script “killall -0 haproxy”
+interval 2
+weight 2
+}
+vrrp_instance 50 {
+virtual_router_id 50
+advert_int 1
+priority 101
+state MASTER
+interface eth0
+virtual_ipaddress {
+172.18.48.20 dev eth0
+}
+track_script {
+haproxy
+}
+}
+
+7.vim /etc/haproxy/haproxy.cfg
+
+balance01上添加如下：
+global
+chroot /var/lib/haproxy
+daemon
+group haproxy
+log 172.18.48.1 local0
+maxconn 4000
+pidfile /var/run/haproxy.pid
+stats socket /var/lib/haproxy/stats
+user haproxy
+defaults
+log global
+maxconn 8000
+option redispatch
+retries 3
+timeout http-request 10s
+timeout queue 1m
+timeout connect 10s
+timeout client 1m
+timeout server 1m
+timeout check 10s
+listen mysql_cluster
+bind 172.18.48.20:3306
+mode tcp
+balance roundrobin
+option mysql-check user root
+option tcpka
+server galera01 172.18.48.3:3306
+server galera02 172.18.48.4:3306
+
+balance02添加如下：
+global
+chroot /var/lib/haproxy
+daemon
+group haproxy
+log 172.18.48.2 local0
+maxconn 4000
+pidfile /var/run/haproxy.pid
+stats socket /var/lib/haproxy/stats
+user haproxy
+defaults
+log global
+maxconn 8000
+option redispatch
+retries 3
+timeout http-request 10s
+timeout queue 1m
+timeout connect 10s
+timeout client 1m
+timeout server 1m
+timeout check 10s
+listen mysql_cluster
+bind 172.18.48.20:3306
+mode tcp
+balance roundrobin
+option mysql-check user root
+option tcpka
+server galera01 172.18.48.3:3306
+server galera02 172.18.48.4:3306
+8.balance节点修改/etc/default/haproxy
+ENABLED=1
+
+9.启动keepalived和haproxy
+service keepalived restart
+service haproxy restart
+
+三：galera节点安装
+
+(一)安装MariaDB，所有galera节点
+
+1.安装软件源
+sudo apt-get install software-properties-common
+sudo apt-key adv –recv-keys –keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+sudo add-apt-repository 'deb http://mirrors.hustunique.com/mariadb/repo/10.0/ubuntu trusty main'
+
+2.安装MariaDB
+sudo apt-get update
+sudo apt-get install mariadb-server
+
+(二)安装galera cluster，所有galera节点
+
+1.安装软件安装源
+apt-get install python-software-properties
+apt-key adv –recv-keys –keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+add-apt-repository 'deb http://mirror3.layerjet.com/mariadb/repo/5.5/ubuntu precise main'
+apt-get update
+
+2.安装galera包
+DEBIAN_FRONTEND=noninteractive apt-get install -y rsync galera mariadb-galera-server
+3.配置galera cluster
+/etc/mysql/conf.d/galera.cnf
+[mysqld]
+mysql settings
+binlog_format=ROW
+default-storage-engine=innodb
+innodb_autoinc_lock_mode=2
+query_cache_size=0
+query_cache_type=0
+bind-address=0.0.0.0
+galera settings
+wsrep_provider=/usr/lib/galera/libgalera_smm.so
+wsrep_cluster_name=“my_wsrep_cluster”
+wsrep_cluster_address=“gcomm://172.18.48.3,172.18.48.4”
+wsrep_sst_method=rsync
+4.galera01和galera02关闭mysql
+galera01 service mysql stop
+galera02 service mysql stop
+5.启动集群，第一个启动的节点要加上集群初始化命令，相当于主节点
+galera01 service mysql start –wsrep-new-cluster
+galera02 service mysql start
+6.检查集群规模
+galera01 mysql -u root -e 'SELECT VARIABLE_VALUE as “cluster size” FROM INFORMATION_SCHEMA.GLOBAL_STATUS WHERE VARIABLE_NAME=“wsrep_cluster_size”'
++————–+
+| cluster size |
++————–+
+| 2 |
++————–+
+7.在galera上创建数据库，并授权允许远程访问
+mysql>create database nova;
+mysql>GRANT ALL ON nova.* TO 'nova'@'%' IDENTIFIED BY 'password';
+四：balance节点和galera的弹性和容灾
+添加新节点时候直接重启服务即可，galera节点必须有一个主节点，即执行如下语句的节点：
+service mysql start –wsrep-new-cluster

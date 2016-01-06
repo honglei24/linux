@@ -1,0 +1,70 @@
+如果是非lvm格式的，则非常方便，给mount命令传递offset参数即可，例如：
+[root@jcwkyl xen-images]# fdisk -lu centos_vm1
+last_lba(): I don't know how to handle files with mode 81ed
+You must set cylinders.
+You can do this from the extra functions menu.
+
+Disk centos_vm1: 0 MB, 0 bytes
+255 heads, 63 sectors/track, 0 cylinders, total 0 sectors
+Units = sectors of 1 * 512 = 512 bytes
+
+Device Boot Start End Blocks Id System
+centos_vm1p1 * 63 208844 104391 83 Linux
+centos_vm1p2 208845 4192964 1992060 8e Linux LVM
+看到第一个磁盘分区是Linux分区，起始于63扇区，直接mount：
+[root@jcwkyl xen-images]# mkdir -p /mnt/disk
+[root@jcwkyl xen-images]# mount -o loop,offset=$[63*512] centos_vm1 /mnt/disk/
+[root@jcwkyl xen-images]# ls /mnt/disk/
+config-2.6.18-92.el5xen lost+found System.map-2.6.18-92.el5xen xen-syms-2.6.18-92.el5
+grub message vmlinuz-2.6.18-92.el5xen
+initrd-2.6.18-92.el5xen.img symvers-2.6.18-92.el5xen.gz xen.gz-2.6.18-92.el5
+显示，这个linux分区是/boot，root文件系统在centos_vm1p2的这块lvm区中，要设法把它mount上来，使用以下方法：
+
+首先找到它的起始偏移，使用fdisk的-u参数在列出磁盘分区的时候以扇区(sector)为单位，否则是以柱面(cylinder)为单位的：
+[root@jcwkyl xen-images]# fdisk -lu centos_vm1
+last_lba(): I don't know how to handle files with mode 81ed
+You must set cylinders.
+You can do this from the extra functions menu.
+
+Disk centos_vm1: 0 MB, 0 bytes
+255 heads, 63 sectors/track, 0 cylinders, total 0 sectors
+Units = sectors of 1 * 512 = 512 bytes
+
+Device Boot Start End Blocks Id System
+centos_vm1p1 * 63 208844 104391 83 Linux
+centos_vm1p2 208845 4192964 1992060 8e Linux LVM
+
+从上看出lvm分区起始于208845扇区，把这个地址处的分区mount为loop设备：
+-f参数表示自动寻找可用的loop设备文件，-o指定偏移量。
+[root@jcwkyl xen-images]# losetup -f -o $[208845*512] centos_vm1 
+[root@jcwkyl xen-images]# losetup -a
+/dev/loop0: [0806]:1097730 (centos_vm1), offset 106928640
+
+扫描lvm volumns:
+[root@jcwkyl xen-images]# lvm pvscan
+PV /dev/loop0 VG VolGroup00 lvm2 [1.88 GB / 0 free]
+Total: 1 [1.88 GB] / in use: 1 [1.88 GB] / in no VG: 0 [0 ]
+
+激活lvm volumn:
+[root@jcwkyl xen-images]# lvm vgchange -ay
+2 logical volume(s) in volume group "VolGroup00" now active
+[root@jcwkyl xen-images]# ls /dev/mapper/
+control VolGroup00-LogVol00 VolGroup00-LogVol01
+[root@jcwkyl xen-images]# lvm lvs
+LV VG Attr LSize Origin Snap% Move Log Copy% Convert
+LogVol00 VolGroup00 -wi-a- 1.50G 
+LogVol01 VolGroup00 -wi-a-384.00M 
+
+使用： 
+[root@jcwkyl xen-images]# mount /dev/mapper/VolGroup00-LogVol00 /mnt/usb
+[root@jcwkyl xen-images]# ls /mnt/usb
+bin dev home lost+found misc opt proc sbin srv tmp var
+boot etc lib media mnt poweroff root selinux sys usr
+
+最后，在操作完以后，umount这个设备，然后设置这个lvm volumn为非活动状态：
+[root@jcwkyl xen-images]# umount /mnt/usb
+[root@jcwkyl xen-images]# lvm vgchange -an
+0 logical volume(s) in volume group "VolGroup00" now active
+[root@jcwkyl xen-images]# losetup -a
+/dev/loop0: [0806]:1097730 (centos_vm1), offset 106928640
+[root@jcwkyl xen-images]# losetup -d /dev/loop0
