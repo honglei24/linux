@@ -1,0 +1,3 @@
+sed -n '/<jvms>/,/<\/jvms>/{/<jvm name=\"default\">/,/<\/jvm>/{/jvm-options/,/<\/jvm-options>/p}}' host.xml | grep -q '\-XX:\-UseSplitVerifier' || sed -i '/<jvms>/,/<\/jvms>/{/<jvm name=\"default\">/,/<\/jvm>/{/<\/jvm-options>/ s#\([[:space:]]*\)\(</jvm-options>\)#\1 <option value="-XX:-UseSplitVerifier"/>\n\1\2#g}}' host.xml
+
+sed -n '/<jvms>/,/<\/jvms>/{/<jvm name=\"default\">/,/<\/jvm>/{/jvm-options/,/<\/jvm-options>/p}}' host.xml | grep -q '\-javaagent:' || sed -i " /<jvms>/,/<\/jvms>/{/<jvm name=\"default\">/,/<\/jvm>/{/<\/jvm-options>/ s#\([[:space:]]*\)\(</jvm-options>\)#\ <option value=\"-javaagent:{${str}}\"/>\n\1\2#g}}" host.xml

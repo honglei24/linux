@@ -1,0 +1,2 @@
+TOKEN=`curl -k -s https://saltmasterIP:8000/login -H "Accept: application/json"  -d username='saltapi'  -d password='password'  -d eauth='pam' | awk 'BEGIN{RS=","} /token/{print $0}' | sed "s#\"##g" | awk -F':' '{print $2}'`
+ curl -k -i https://saltmasterIP:8000/ -H "Accept: application/json"  -H "X-Auth-Token: ${TOKEN}" -d client='local' -d tgt='10.10.0.1' -d fun="cmd.run" -d arg="uname -a"

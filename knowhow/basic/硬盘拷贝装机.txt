@@ -1,0 +1,65 @@
+#######################################################################
+**注意
+1.本手册是通过硬盘拷贝装机
+2.本手册适用于现有的opnestack环境中的cobbler服务器
+#######################################################################
+
+
+【制作镜像】在制作镜像的机器上操作
+通过光盘安装操作系统到第一块硬盘，按需配置（省略）。
+增加一块硬盘，例如为/sdb
+# mkdir /test
+# mount /dev/sdb /test
+# dd if=/dev/sda | gzip > image.gz
+
+【cobbler上传递操作】
+拷贝centos6.5-test.ks到/var/lib/cobbler/kickstarts/目录下到修改IP为cobbler服务器的IP地址
+# cobbler profile add --name=centos6.5-test --distro=centos6.5-x86_64 --kickstart=/var/lib/cobbler/kickstarts/centos6.5-test.ks
+
+# cobbler system add --name=test --profile=centos6.5-test --interface=eth0 --mac=00:50:56:8e:db:af
+
+重启需要按照系统的机器，设置pxe为第一启动项
+
+确认装机完成。
+
+############################以下是KS文件################
+install
+url --url=$tree
+lang en_US.UTF-8
+keyboard us
+network --onboot yes --device eth0 --bootproto static --noipv6
+firewall --service=ssh
+authconfig --enableshadow --passalgo=sha512
+selinux --disable
+timezone --utc America/New_York
+bootloader --location=mbr --driveorder=sda --append="nomodeset crashkernel=auto rhgb quiet"
+text
+clearpart --all --initlabel
+
+%pre
+#!/bin/sh
+set -x -v
+exec 1>/tmp/ks-pre.log 2>&1
+
+# Once root's homedir is there, copy over the log.
+while : ; do
+    sleep 10
+    if [ -d /mnt/sysimage/root ]; then
+        cp /tmp/ks-pre.log /mnt/sysimage/root/
+        logger "Copied %pre section log to system"
+        break
+    fi
+done &
+cd /dev
+echo "shit" >/tmp/hl
+wget http://10.0.0.201/image.gz -O image.gz
+gunzip -c image.gz | dd of=/dev/sda
+mkdir -p /mnt/sysimage
+mount /dev/sda2 /mnt/sysimage
+sleep 120
+reboot
+%end
+
+%post
+echo "shit" >/mnt/sysimage/tmp/test
+%end

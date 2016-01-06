@@ -1,0 +1,4 @@
+for i in `seq 1 5`; do echo $i; list=`head -n $((i*200)) tmp.list | awk '{print $1}'| tail -n 200 | tr '\n' ','`; salt -L "${list}" --username=username --password=password -a pam --out=txt cmd.run "grep -q tenant /etc/nova/nova.conf && echo OK" >>/tmp/check.result; done
+
+
+list=`tail -n 97 /tmp/tmp.list | awk '{print $1}' | tr '\n' ','`; salt -L "${list}" --username=username --password=password -a pam --out=txt cmd.run "grep -q tenant /etc/nova/nova.conf && echo OK" >>/tmp/check.result

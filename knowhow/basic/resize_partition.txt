@@ -1,0 +1,50 @@
+[root@image ~]## df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2       7.4G  781M  6.3G  11% /
+tmpfs           7.8G     0  7.8G   0% /dev/shm
+/dev/sda1       485M   31M  429M   7% /boot
+
+[root@image ~]# fdisk /dev/sda
+
+WARNING: DOS-compatible mode is deprecated. It's strongly recommended to
+         switch off the mode (command 'c') and change display units to
+         sectors (command 'u').
+
+Command (m for help): p
+
+Disk /dev/sda: 10.7 GB, 10737418240 bytes
+255 heads, 63 sectors/track, 1305 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x000d09b4
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *           1          64      512000   83  Linux
+Partition 1 does not end on cylinder boundary.
+/dev/sda2              64        1045     7875584   83  Linux
+
+Command (m for help): d
+Partition number (1-4): 2
+
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Partition number (1-4): 2
+First cylinder (64-1305, default 64):
+Using default value 64
+Last cylinder, +cylinders or +size{K,M,G} (64-1305, default 1305):
+Using default value 1305
+
+Command (m for help): w
+
+[root@image ~]# reboot
+
+[root@image ~]# resize2fs /dev/sda
+[root@image ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2       9.4G  781M  8.2G   9% /
+tmpfs           7.8G     0  7.8G   0% /dev/shm
+/dev/sda1       485M   31M  429M   7% /boot
