@@ -1,0 +1,3 @@
+dns执行卡在Generating /etc/rndc.key:这个地方。
+解决方案:
+# rndc-confgen -r /dev/urandom -a

@@ -1,0 +1,2 @@
+openoffice.org-opensymbol-fonts³åÍ»
+yum remove openoffice.org-opensymbol-fonts

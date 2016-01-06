@@ -1,0 +1,356 @@
+★　#の後ろのコマンドを実行すること。
+★　前提条件:Controllerノードに通信できること。python2.6インストールすること
+★　以下はcomputeノード実施した例
+
+tenantName、username、passwordを正しい設定して、token IDとtenant IDを取得する
+# curl -X POST -d  '{"auth": {"tenantName": "admin", "passwordCredentials":{"username": "admin", "password": "Fnst.1234"}}}' -H "Content-type: application/json" http://10.167.130.60:35357/v2.0/tokens | python -mjson.tool
+{
+    "access": {
+        "metadata": {
+            "is_admin": 0,
+            "roles": [
+                "9fe2ff9ee4384b1894a90878d3e92bab",
+                "1bead2c8d2b341d29f4513f85c355dc6"
+            ]
+        },
+        "serviceCatalog": [
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://controller:8774/v2/c4f24183d9a546fba24835fa9ff16893",
+                        "id": "27f13196467b443c84730ccffeb355af",
+                        "internalURL": "http://controller:8774/v2/c4f24183d9a546fba24835fa9ff16893",
+                        "publicURL": "http://controller:8774/v2/c4f24183d9a546fba24835fa9ff16893",
+                        "region": "regionOne"
+                    }
+                ],
+                "endpoints_links": [],
+                "name": "nova",
+                "type": "compute"
+            },
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://controller:9696",
+                        "id": "05274a543eea4941bc9bcb5309e73daf",
+                        "internalURL": "http://controller:9696",
+                        "publicURL": "http://controller:9696",
+                        "region": "regionOne"
+                    }
+                ],
+                "endpoints_links": [],
+                "name": "neutron",
+                "type": "network"
+            },
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://controller:8776/v2/c4f24183d9a546fba24835fa9ff16893",
+                        "id": "5da09d25998744d7a7c56b9218677ac0",
+                        "internalURL": "http://controller:8776/v2/c4f24183d9a546fba24835fa9ff16893",
+                        "publicURL": "http://controller:8776/v2/c4f24183d9a546fba24835fa9ff16893",
+                        "region": "regionOne"
+                    }
+                ],
+                "endpoints_links": [],
+                "name": "cinderv2",
+                "type": "volumev2"
+            },
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://controller:9292",
+                        "id": "b01f5fe8b8a74efcb4e3d7dcdd504661",
+                        "internalURL": "http://controller:9292",
+                        "publicURL": "http://controller:9292",
+                        "region": "regionOne"
+                    }
+                ],
+                "endpoints_links": [],
+                "name": "glance",
+                "type": "image"
+            },
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://controller:8777",
+                        "id": "519f3ac587cb4e07b4157d6e680bc899",
+                        "internalURL": "http://controller:8777",
+                        "publicURL": "http://controller:8777",
+                        "region": "regionOne"
+                    }
+                ],
+                "endpoints_links": [],
+                "name": "ceilometer",
+                "type": "metering"
+            },
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://controller:8776/v1/c4f24183d9a546fba24835fa9ff16893",
+                        "id": "13997fe8fa974a709f905b58570fcc87",
+                        "internalURL": "http://controller:8776/v1/c4f24183d9a546fba24835fa9ff16893",
+                        "publicURL": "http://controller:8776/v1/c4f24183d9a546fba24835fa9ff16893",
+                        "region": "regionOne"
+                    }
+                ],
+                "endpoints_links": [],
+                "name": "cinder",
+                "type": "volume"
+            },
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://storage:8080",
+                        "id": "1bb2661049ee4fbd96bd5ee8e341d4b9",
+                        "internalURL": "http://storage:8080/v1/AUTH_c4f24183d9a546fba24835fa9ff16893",
+                        "publicURL": "http://storage:8080/v1/AUTH_c4f24183d9a546fba24835fa9ff16893",
+                        "region": "regionOne"
+                    }
+                ],
+                "endpoints_links": [],
+                "name": "swift",
+                "type": "object-store"
+            },
+            {
+                "endpoints": [
+                    {
+                        "adminURL": "http://controller:35357/v2.0",
+                        "id": "08d37b3ab54045c781698cef27b28f82",
+                        "internalURL": "http://controller:5000/v2.0",
+                        "publicURL": "http://controller:5000/v2.0",
+                        "region": "regionOne"
+                    }
+                ],
+                "endpoints_links": [],
+                "name": "keystone",
+                "type": "identity"
+            }
+        ],
+        "token": {
+            "expires": "2014-07-11T09:43:55Z",
+            "id": "MIINqwYJKoZIhvcNAQcCoIINnDCCDZgCAQExCTAHBgUrDgMCGjCCDAEGCSqGSIb3DQEHAaCCC-IEggvueyJhY2Nlc3MiOiB7InRva2VuIjogeyJpc3N1ZWRfYXQiOiAiMjAxNC0wNy0xMFQwOTo0Mzo1NS4zMjQwMjUiLCAiZXhwaXJlcyI6ICIyMDE0LTA3LTExVDA5OjQzOjU1WiIsICJpZCI6ICJwbGFjZWhvbGRlciIsICJ0ZW5hbnQiOiB7ImRlc2NyaXB0aW9uIjogIkFkbWluIFRlbmFudCIsICJlbmFibGVkIjogdHJ1ZSwgImlkIjogImM0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgIm5hbWUiOiAiYWRtaW4ifX0sICJzZXJ2aWNlQ2F0YWxvZyI6IFt7ImVuZHBvaW50cyI6IFt7ImFkbWluVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjg3NzQvdjIvYzRmMjQxODNkOWE1NDZmYmEyNDgzNWZhOWZmMTY4OTMiLCAicmVnaW9uIjogInJlZ2lvbk9uZSIsICJpbnRlcm5hbFVSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc0L3YyL2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgImlkIjogIjI3ZjEzMTk2NDY3YjQ0M2M4NDczMGNjZmZlYjM1NWFmIiwgInB1YmxpY1VSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc0L3YyL2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIn1dLCAiZW5kcG9pbnRzX2xpbmtzIjogW10sICJ0eXBlIjogImNvbXB1dGUiLCAibmFtZSI6ICJub3ZhIn0sIHsiZW5kcG9pbnRzIjogW3siYWRtaW5VUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6OTY5NiIsICJyZWdpb24iOiAicmVnaW9uT25lIiwgImludGVybmFsVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjk2OTYiLCAiaWQiOiAiMDUyNzRhNTQzZWVhNDk0MWJjOWJjYjUzMDllNzNkYWYiLCAicHVibGljVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjk2OTYifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAibmV0d29yayIsICJuYW1lIjogIm5ldXRyb24ifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc2L3YyL2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3Ni92Mi9jNGYyNDE4M2Q5YTU0NmZiYTI0ODM1ZmE5ZmYxNjg5MyIsICJpZCI6ICI1ZGEwOWQyNTk5ODc0NGQ3YTdjNTZiOTIxODY3N2FjMCIsICJwdWJsaWNVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3Ni92Mi9jNGYyNDE4M2Q5YTU0NmZiYTI0ODM1ZmE5ZmYxNjg5MyJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJ2b2x1bWV2MiIsICJuYW1lIjogImNpbmRlcnYyIn0sIHsiZW5kcG9pbnRzIjogW3siYWRtaW5VUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6OTI5MiIsICJyZWdpb24iOiAicmVnaW9uT25lIiwgImludGVybmFsVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjkyOTIiLCAiaWQiOiAiYjAxZjVmZThiOGE3NGVmY2I0ZTNkN2RjZGQ1MDQ2NjEiLCAicHVibGljVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjkyOTIifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAiaW1hZ2UiLCAibmFtZSI6ICJnbGFuY2UifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc3IiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3NyIsICJpZCI6ICI1MTlmM2FjNTg3Y2I0ZTA3YjQxNTdkNmU2ODBiYzg5OSIsICJwdWJsaWNVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3NyJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJtZXRlcmluZyIsICJuYW1lIjogImNlaWxvbWV0ZXIifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc2L3YxL2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3Ni92MS9jNGYyNDE4M2Q5YTU0NmZiYTI0ODM1ZmE5ZmYxNjg5MyIsICJpZCI6ICIxMzk5N2ZlOGZhOTc0YTcwOWY5MDViNTg1NzBmY2M4NyIsICJwdWJsaWNVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3Ni92MS9jNGYyNDE4M2Q5YTU0NmZiYTI0ODM1ZmE5ZmYxNjg5MyJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJ2b2x1bWUiLCAibmFtZSI6ICJjaW5kZXIifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vc3RvcmFnZTo4MDgwIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL3N0b3JhZ2U6ODA4MC92MS9BVVRIX2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgImlkIjogIjFiYjI2NjEwNDllZTRmYmQ5NmJkNWVlOGUzNDFkNGI5IiwgInB1YmxpY1VSTCI6ICJodHRwOi8vc3RvcmFnZTo4MDgwL3YxL0FVVEhfYzRmMjQxODNkOWE1NDZmYmEyNDgzNWZhOWZmMTY4OTMifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAib2JqZWN0LXN0b3JlIiwgIm5hbWUiOiAic3dpZnQifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vY29udHJvbGxlcjozNTM1Ny92Mi4wIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6NTAwMC92Mi4wIiwgImlkIjogIjA4ZDM3YjNhYjU0MDQ1Yzc4MTY5OGNlZjI3YjI4ZjgyIiwgInB1YmxpY1VSTCI6ICJodHRwOi8vY29udHJvbGxlcjo1MDAwL3YyLjAifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAiaWRlbnRpdHkiLCAibmFtZSI6ICJrZXlzdG9uZSJ9XSwgInVzZXIiOiB7InVzZXJuYW1lIjogImFkbWluIiwgInJvbGVzX2xpbmtzIjogW10sICJpZCI6ICI5ODZhOTk4NDM5YTQ0MzVkOGNlNWUzYzllZTViYjEwNiIsICJyb2xlcyI6IFt7Im5hbWUiOiAiX21lbWJlcl8ifSwgeyJuYW1lIjogImFkbWluIn1dLCAibmFtZSI6ICJhZG1pbiJ9LCAibWV0YWRhdGEiOiB7ImlzX2FkbWluIjogMCwgInJvbGVzIjogWyI5ZmUyZmY5ZWU0Mzg0YjE4OTRhOTA4NzhkM2U5MmJhYiIsICIxYmVhZDJjOGQyYjM0MWQyOWY0NTEzZjg1YzM1NWRjNiJdfX19MYIBgTCCAX0CAQEwXDBXMQswCQYDVQQGEwJVUzEOMAwGA1UECAwFVW5zZXQxDjAMBgNVBAcMBVVuc2V0MQ4wDAYDVQQKDAVVbnNldDEYMBYGA1UEAwwPd3d3LmV4YW1wbGUuY29tAgEBMAcGBSsOAwIaMA0GCSqGSIb3DQEBAQUABIIBAJ2Px8TVgc134qrTvVTcwbFAyOMvUsEFk9uFgzFLIDlsvxazcr9m8WGCyNjNShv0iA6E7dNtM8SB35TGm7KkI5V+hpgDUqdAiYbJ5dZcV5+5f15S427BqDyJbsx2aZvNx8zHJo0aR96t0IShBKa-m+jE1iQVMGA+3Dga9qdE4oM+CuQtavW7Kbzhe+1hT+04souwQcrPF1RVysUNt4gCKi-PYTc7FtWZTK4XOkwZPNI6UUL60dh37Q7KUhX9PnfQCaE3TA8-u21pkVIGH+59qgX0c2r2dA8qKk+QsjPPwWvwOHQIKT5BW2PAnLQalkXQr6GBBge490+Hu7xQ2P+OfXU=",
+            "issued_at": "2014-07-10T09:43:55.324025",
+            "tenant": {
+                "description": "Admin Tenant",
+                "enabled": true,
+                "id": "c4f24183d9a546fba24835fa9ff16893",
+                "name": "admin"
+            }
+        },
+        "user": {
+            "id": "986a998439a4435d8ce5e3c9ee5bb106",
+            "name": "admin",
+            "roles": [
+                {
+                    "name": "_member_"
+                },
+                {
+                    "name": "admin"
+                }
+            ],
+            "roles_links": [],
+            "username": "admin"
+        }
+    }
+}
+
+# token_id="MIINqwYJKoZIhvcNAQcCoIINnDCCDZgCAQExCTAHBgUrDgMCGjCCDAEGCSqGSIb3DQEHAaCCC-IEggvueyJhY2Nlc3MiOiB7InRva2VuIjogeyJpc3N1ZWRfYXQiOiAiMjAxNC0wNy0xMFQwOTo0Mzo1NS4zMjQwMjUiLCAiZXhwaXJlcyI6ICIyMDE0LTA3LTExVDA5OjQzOjU1WiIsICJpZCI6ICJwbGFjZWhvbGRlciIsICJ0ZW5hbnQiOiB7ImRlc2NyaXB0aW9uIjogIkFkbWluIFRlbmFudCIsICJlbmFibGVkIjogdHJ1ZSwgImlkIjogImM0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgIm5hbWUiOiAiYWRtaW4ifX0sICJzZXJ2aWNlQ2F0YWxvZyI6IFt7ImVuZHBvaW50cyI6IFt7ImFkbWluVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjg3NzQvdjIvYzRmMjQxODNkOWE1NDZmYmEyNDgzNWZhOWZmMTY4OTMiLCAicmVnaW9uIjogInJlZ2lvbk9uZSIsICJpbnRlcm5hbFVSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc0L3YyL2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgImlkIjogIjI3ZjEzMTk2NDY3YjQ0M2M4NDczMGNjZmZlYjM1NWFmIiwgInB1YmxpY1VSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc0L3YyL2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIn1dLCAiZW5kcG9pbnRzX2xpbmtzIjogW10sICJ0eXBlIjogImNvbXB1dGUiLCAibmFtZSI6ICJub3ZhIn0sIHsiZW5kcG9pbnRzIjogW3siYWRtaW5VUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6OTY5NiIsICJyZWdpb24iOiAicmVnaW9uT25lIiwgImludGVybmFsVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjk2OTYiLCAiaWQiOiAiMDUyNzRhNTQzZWVhNDk0MWJjOWJjYjUzMDllNzNkYWYiLCAicHVibGljVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjk2OTYifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAibmV0d29yayIsICJuYW1lIjogIm5ldXRyb24ifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc2L3YyL2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3Ni92Mi9jNGYyNDE4M2Q5YTU0NmZiYTI0ODM1ZmE5ZmYxNjg5MyIsICJpZCI6ICI1ZGEwOWQyNTk5ODc0NGQ3YTdjNTZiOTIxODY3N2FjMCIsICJwdWJsaWNVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3Ni92Mi9jNGYyNDE4M2Q5YTU0NmZiYTI0ODM1ZmE5ZmYxNjg5MyJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJ2b2x1bWV2MiIsICJuYW1lIjogImNpbmRlcnYyIn0sIHsiZW5kcG9pbnRzIjogW3siYWRtaW5VUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6OTI5MiIsICJyZWdpb24iOiAicmVnaW9uT25lIiwgImludGVybmFsVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjkyOTIiLCAiaWQiOiAiYjAxZjVmZThiOGE3NGVmY2I0ZTNkN2RjZGQ1MDQ2NjEiLCAicHVibGljVVJMIjogImh0dHA6Ly9jb250cm9sbGVyOjkyOTIifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAiaW1hZ2UiLCAibmFtZSI6ICJnbGFuY2UifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc3IiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3NyIsICJpZCI6ICI1MTlmM2FjNTg3Y2I0ZTA3YjQxNTdkNmU2ODBiYzg5OSIsICJwdWJsaWNVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3NyJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJtZXRlcmluZyIsICJuYW1lIjogImNlaWxvbWV0ZXIifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vY29udHJvbGxlcjo4Nzc2L3YxL2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3Ni92MS9jNGYyNDE4M2Q5YTU0NmZiYTI0ODM1ZmE5ZmYxNjg5MyIsICJpZCI6ICIxMzk5N2ZlOGZhOTc0YTcwOWY5MDViNTg1NzBmY2M4NyIsICJwdWJsaWNVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6ODc3Ni92MS9jNGYyNDE4M2Q5YTU0NmZiYTI0ODM1ZmE5ZmYxNjg5MyJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJ2b2x1bWUiLCAibmFtZSI6ICJjaW5kZXIifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vc3RvcmFnZTo4MDgwIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL3N0b3JhZ2U6ODA4MC92MS9BVVRIX2M0ZjI0MTgzZDlhNTQ2ZmJhMjQ4MzVmYTlmZjE2ODkzIiwgImlkIjogIjFiYjI2NjEwNDllZTRmYmQ5NmJkNWVlOGUzNDFkNGI5IiwgInB1YmxpY1VSTCI6ICJodHRwOi8vc3RvcmFnZTo4MDgwL3YxL0FVVEhfYzRmMjQxODNkOWE1NDZmYmEyNDgzNWZhOWZmMTY4OTMifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAib2JqZWN0LXN0b3JlIiwgIm5hbWUiOiAic3dpZnQifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vY29udHJvbGxlcjozNTM1Ny92Mi4wIiwgInJlZ2lvbiI6ICJyZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovL2NvbnRyb2xsZXI6NTAwMC92Mi4wIiwgImlkIjogIjA4ZDM3YjNhYjU0MDQ1Yzc4MTY5OGNlZjI3YjI4ZjgyIiwgInB1YmxpY1VSTCI6ICJodHRwOi8vY29udHJvbGxlcjo1MDAwL3YyLjAifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAiaWRlbnRpdHkiLCAibmFtZSI6ICJrZXlzdG9uZSJ9XSwgInVzZXIiOiB7InVzZXJuYW1lIjogImFkbWluIiwgInJvbGVzX2xpbmtzIjogW10sICJpZCI6ICI5ODZhOTk4NDM5YTQ0MzVkOGNlNWUzYzllZTViYjEwNiIsICJyb2xlcyI6IFt7Im5hbWUiOiAiX21lbWJlcl8ifSwgeyJuYW1lIjogImFkbWluIn1dLCAibmFtZSI6ICJhZG1pbiJ9LCAibWV0YWRhdGEiOiB7ImlzX2FkbWluIjogMCwgInJvbGVzIjogWyI5ZmUyZmY5ZWU0Mzg0YjE4OTRhOTA4NzhkM2U5MmJhYiIsICIxYmVhZDJjOGQyYjM0MWQyOWY0NTEzZjg1YzM1NWRjNiJdfX19MYIBgTCCAX0CAQEwXDBXMQswCQYDVQQGEwJVUzEOMAwGA1UECAwFVW5zZXQxDjAMBgNVBAcMBVVuc2V0MQ4wDAYDVQQKDAVVbnNldDEYMBYGA1UEAwwPd3d3LmV4YW1wbGUuY29tAgEBMAcGBSsOAwIaMA0GCSqGSIb3DQEBAQUABIIBAJ2Px8TVgc134qrTvVTcwbFAyOMvUsEFk9uFgzFLIDlsvxazcr9m8WGCyNjNShv0iA6E7dNtM8SB35TGm7KkI5V+hpgDUqdAiYbJ5dZcV5+5f15S427BqDyJbsx2aZvNx8zHJo0aR96t0IShBKa-m+jE1iQVMGA+3Dga9qdE4oM+CuQtavW7Kbzhe+1hT+04souwQcrPF1RVysUNt4gCKi-PYTc7FtWZTK4XOkwZPNI6UUL60dh37Q7KUhX9PnfQCaE3TA8-u21pkVIGH+59qgX0c2r2dA8qKk+QsjPPwWvwOHQIKT5BW2PAnLQalkXQr6GBBge490+Hu7xQ2P+OfXU="
+# tenant_id="c4f24183d9a546fba24835fa9ff16893"
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/images | python -mjson.tool | grep -e id -e name
+            "id": "88d201eb-c024-43b3-8d0a-1869ad676375",
+            "name": "new"
+            "id": "17574e69-ce03-4c30-9f7a-33982d6cab3e",
+            "name": "rubytest"
+            "id": "0853c6c7-8c2e-42b9-8bab-4aaba133afb1",
+            "name": "elb_0630"
+            "id": "a2cff60b-138f-4e38-a693-8432623d1274",
+            "name": "region_manager1"
+            "id": "46d6681c-feda-44e0-907b-15bace114148",
+            "name": "regionManger"
+            "id": "a9c3d0f3-b9ea-492f-9142-071c0f78066d",
+            "name": "CentOS 6.4 b52img"
+            "id": "a8aee447-7347-45db-b24d-287cd932926a",
+            "name": "CentOS 6.4 b52img ramdisk"
+            "id": "8046a058-4aea-4d9d-9db5-0619751dea44",
+            "name": "CentOS 6.4 b52img kernel"
+            "id": "4cc398d4-0baf-441d-9512-50340889d980",
+            "name": "elb_fj"
+            "id": "649ba605-00ef-41c1-8d41-ba406f3b230c",
+            "name": "elb_0627"
+            "id": "7b8271f8-a160-4573-8292-674ada2837ae",
+            "name": "tempest-snapshot"
+            "id": "1232074d-544f-43a2-9970-8e89ecd05b30",
+            "name": "fsdfasfas"
+            "id": "86ae5786-efb6-4788-a4cb-6fbd10426f66",
+            "name": "image_0616"
+            "id": "ccdc6948-39aa-47b7-a54a-7a48703f9345",
+            "name": "elb_with_cloudinit"
+            "id": "44300477-7146-41c7-b105-4a6bce9f3211",
+            "name": "elb"
+            "id": "cf55a92a-c01b-4329-bb0e-4731b2aa0a3f",
+            "name": "elb_centos"
+            "id": "3d91043c-c9f8-41e0-819e-78f4206fc76a",
+            "name": "centos"
+            "id": "9f033140-ea8c-41fe-a432-e832799aa47f",
+            "name": "cirros-0.3.2-x86_64"
+★結果① 
+
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/os-availability-zone | python -mjson.tool | grep zoneName
+            "zoneName": "nova",
+★結果②
+
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8776/v1/${tenant_id}/types | python -mjson.tool | grep '"name":'
+            "name": "Performance"
+            "name": "Backup"
+            "name": "SSD"
+★結果③
+
+--imageRef　　★結果①のID欄を参照する
+--display-name　　何でもいいです。
+--volume-type　★結果③のName欄を参照する
+--availability-zone　★結果②のName欄を参照する
+--size　　ボニュームのサイズはイメージに合わせて設定する。
+# curl -X POST -H "X-Auth-Token:${token_id}" -H "Content-type: application/json"  http://10.167.130.60:8776/v1/${tenant_id}/volumes  -d '{"volume": {"display_name": "cloudwatch1_sys", "imageRef": "9f033140-ea8c-41fe-a432-e832799aa47f", "availability_zone": "nova", "volume_type": "Performance", "display_description": null, "snapshot_id": null, "size": 1}}'
+
+status確認
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json"  http://10.167.130.60:8776/v1/${tenant_id}/volumes | python -mjson.tool | grep -C 7 'cloudwatch1_sys' | grep -e '"status"' -e '"id"'
+            "id": "14fb918f-82d2-4a92-b08b-dcf97ee915d1",
+            "status": "available",
+★結果④
+statusはavailableであることを確認して、次に進む。
+
+flavors一覧取得
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/flavors | python -mjson.tool  | grep -e id -e name
+            "id": "08f2ef1a-9401-45cf-b3f4-cdf19f270541",
+            "name": "ec2.test.1"
+            "id": "1240414569",
+            "name": "test_flavor-559199721"
+            "id": "2",
+            "name": "m1.small"
+            "id": "24604e98-8295-43fc-9cbb-2eb7e8b13e4b",
+            "name": "elb_fj"
+            "id": "3",
+            "name": "m1.medium"
+            "id": "4",
+            "name": "m1.large"
+            "id": "5",
+            "name": "m1.xlarge"
+            "id": "a53a16a1-cb7f-4ef3-bc12-c90742784a75",
+            "name": "region_manager"
+            "id": "b918d6d4-6f52-4980-b9b5-d3612ebd71b4",
+            "name": "ec2.test.2"
+            "id": "d8fa0c36-b753-42a4-b6c8-38a551bca63c",
+            "name": "tempest_01"
+            "id": "e2053a87-61b8-458a-8e4f-df40c564e0da",
+            "name": "m1.tiny"
+            "id": "e6910250-0ede-4a7c-a7b8-db516777079d",
+            "name": "elb"
+            "id": "eac0c56c-4911-4aae-aa17-f1df4ce595f2",
+            "name": "test_elb_629"
+★結果⑤
+
+network一覧取得
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/os-tenant-networks | python -mjson.tool  | grep -e label -e '"id":'
+            "id": "09aa6f98-27d0-4eeb-87ca-5d48d744ea01",
+            "label": "ext-net"
+            "id": "17812250-1930-47a9-8eca-68f885ef2972",
+            "label": "test3"
+            "id": "195369a7-f782-4d74-83bc-b8dc074bf13e",
+            "label": "test"
+            "id": "27ea2f3c-cc3d-43ed-922d-777a299f3622",
+            "label": "02"
+            "id": "350dbc31-d2e6-49da-a300-20e52d12a1b7",
+            "label": "elb_sux1"
+            "id": "36f53058-4b43-437d-8564-3fec1f39912d",
+            "label": "sample-network"
+            "id": "3e3675f2-1d15-45cb-b43c-d1a5459f3b02",
+            "label": "elb_net"
+            "id": "3f82cd3b-0da5-47a5-9c6a-05d664daf9bd",
+            "label": "elb_manage_net"
+            "id": "58fb64c3-f44f-4e7f-a561-4d42ba58bd92",
+            "label": "test1"
+            "id": "5b8e5eab-e193-4494-9ac0-7c05b1646320",
+            "label": "test2"
+            "id": "5e0709fb-b6da-4e5e-b143-aaab16d9c6d2",
+            "label": "haproxy"
+            "id": "63caf17c-e566-43f2-9cd9-5be4726352cc",
+            "label": "api-test-neutron"
+            "id": "6b332def-b50b-4923-90f5-da8bef16eb2f",
+            "label": "test-net"
+            "id": "86626934-9e19-467d-8c5d-f47deeda46c2",
+            "label": "zl_bis"
+            "id": "8fad1fb7-b0f4-4949-a1dd-94414caa934b",
+            "label": "elb_admin"
+            "id": "98b54de4-0ddd-487a-b6b0-ee4127d8f1c9",
+            "label": "zl_man"
+            "id": "b8961736-e5b3-4e39-a59f-7ff127b9268a",
+            "label": "01"
+            "id": "c64144be-f6df-4aab-8cde-418e46f8de90",
+            "label": "elb_sux"
+            "id": "c7ea6257-4765-4d47-b285-23f567683690",
+            "label": "api-test-compute"
+            "id": "dbd87ee7-a01e-408d-84e4-573aeef406a6",
+            "label": "tempest-network"
+            "id": "f8758dce-584b-43b3-8aa6-987f57e30a92",
+            "label": "test_for_network"
+            "id": "fd81ff61-9f6f-4030-a3cb-851f761c8316",
+            "label": "03"
+★結果⑥
+
+security-groups一覧取得
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/os-security-groups | python -mjson.tool  | grep -e description -e '"id":'
+            "description": "default",
+            "id": "ab23ade6-45e9-4ce3-9c3d-62cb6700c06b",
+                    "id": "59f28fc5-d700-4f2c-9528-67fe12dd7d27",
+                    "id": "80d3c5d1-6a65-4fae-b564-497b6ed1a849",
+                    "id": "bc666847-27a4-468e-bd52-2bfd786bcfcb",
+                    "id": "db73f89b-1dba-426e-8ffe-4ed5a11b51f7",
+            "description": "private test security group",
+            "id": "276588cb-352e-4f50-ae9e-3798afdd697b",
+★結果⑦
+
+インスタンス作成
+--boot-volume　★結果④のID欄を参照する
+--flavor　★結果⑤のName欄を参照する
+--nic　net-idは★結果⑥のID欄を参照する
+--security-group　★結果⑦のNameを参照する、設定しなくでもよい
+--インスタンス名は自分に指定する。
+# curl -X POST -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/os-volumes_boot -d '{"server": {"name": "cloudwatch1", "imageRef": "", "block_device_mapping_v2": [{"source_type": "volume", "delete_on_termination": false, "boot_index": 0, "uuid": "e1a063ce-346f-43a9-b7a5-38748970711a", "destination_type": "volume"}], "flavorRef": "e2053a87-61b8-458a-8e4f-df40c564e0da", "max_count": 1, "min_count": 1, "networks": [{"fixed_ip": "192.168.7.100", "uuid": "5b8e5eab-e193-4494-9ac0-7c05b1646320"}], "security_groups": [{"name": "default"}]}}'
+
+
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/servers/detail | python -mjson.tool | grep -A 15 'cloudwatch1'  | grep '"status":'
+            "status": "ACTIVE",
+statusがACTIVEであることを確認する。
+
+
+--以上
+
+
+★以下はボニュームとインスタンスの削除手順
+インスタンスID確認
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/servers/detail | python -mjson.tool | grep -C 15 'cloudwatch1' | grep '"id":'
+            "id": "35eff89f-11e4-4136-a723-a06595e56d30",
+                    "id": "e1a063ce-346f-43a9-b7a5-38748970711a"
+
+# instance_id="35eff89f-11e4-4136-a723-a06595e56d30"
+インスタンス削除
+# curl -X DELETE -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/servers/${instance_id}
+
+インスタンス削除されたことを確認
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json" http://10.167.130.60:8774/v2/${tenant_id}/servers/detail | python -mjson.tool | grep 'cloudwatch1' 
+# echo $?
+結果は1のことを確認する。
+
+ボニュームID確認
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json"  http://10.167.130.60:8776/v1/${tenant_id}/volumes | python -mjson.tool | grep -A 5 'cloudwatch1_sys' | grep '"id":'
+            "id": "14fb918f-82d2-4a92-b08b-dcf97ee915d1",
+            
+ボニュームID確認
+# volume_id="14fb918f-82d2-4a92-b08b-dcf97ee915d1"
+# curl -X DELETE -H "X-Auth-Token:${token_id}" -H "Content-type: application/json"  http://10.167.130.60:8776/v1/${tenant_id}/volumes/${volume_id}
+
+ボニューム削除されたことを確認
+# curl -X GET -H "X-Auth-Token:${token_id}" -H "Content-type: application/json"  http://10.167.130.60:8776/v1/${tenant_id}/volumes | python -mjson.tool | grep -A 5 'cloudwatch1_sys'
+# echo $?
+結果は1のことを確認する

@@ -1,0 +1,32 @@
+(1)
+source openrc
+export OS_SERVICE_TOKEN=6963f5742abfde9ce07b
+export OS_SERVICE_ENDPOINT=http://10.7.0.201:35357/v2.0
+
+(2)
+keystone endpoint-create --region jp-east-1b --service 79066fe949064550930a61b33a49eb53 --publicurl "http://10.7.0.201:\$(public_port)s/v2.0" --internalurl "http://10.7.0.201:\$(public_port)s/v2.0" --adminurl "http://10.7.0.201:\$(admin_port)s/v2.0"
+
+(3)
+keystone endpoint-create --region jp-east-1b --service ea850dab0e964e12a9f66787ee8623ae --publicurl "http://10.7.0.201:9292" --internalurl "http://10.7.0.201:9292" --adminurl "http://10.7.0.201:9292"
+
+(4)
+keystone endpoint-create --region jp-east-1b --service 3e19093f50cc4590973c8953e2c327f9 --publicurl "http://10.7.0.201:8774/v2/\$(tenant_id)s" --internalurl "http://10.7.0.201:8774/v2/\$(tenant_id)s" --adminurl "http://10.7.0.201:8774/v2/\$(tenant_id)s"
+
+(5)
+keystone endpoint-create --region jp-east-1b --service 6cf37e33dc7140b9b032faabfa53a53e --publicurl "http://10.7.0.201:9696" --internalurl "http://10.7.0.201:9696" --adminurl "http://10.7.0.201:9696"
+
+(6)
+keystone endpoint-create --region jp-east-1b --service 0ec640e57e4d4374841d2ab7b292f2c2 --publicurl "http://10.7.0.201:8776/v1/\$(tenant_id)s" --internalurl "http://10.7.0.201:8776/v1/\$(tenant_id)s" --adminurl "http://10.7.0.201:8776/v1/\$(tenant_id)s"
+
+(7)
+keystone endpoint-create --region jp-east-1b --service 9bf82d0466714eee86e304ab3301aec9 --publicurl "http://10.7.0.201:8776/v2/\$(tenant_id)s" --internalurl "http://10.7.0.201:8776/v2/\$(tenant_id)s" --adminurl "http://10.7.0.201:8776/v2/\$(tenant_id)s"
+
+(8)
+keystone endpoint-create --region jp-east-1b --service 0dafa2a9240c41268c37818979769c88 --publicurl "http://172.17.11.201:8004/v1/%(tenant_id)s" --internalurl "http://172.17.11.201:8004/v1/%(tenant_id)s" --adminurl "http://172.17.11.201:8004/v1/%(tenant_id)s"
+
+(9)
+keystone endpoint-create --region jp-east-1b --service 024329e4fde148e58ecd90b7d9872438 --publicurl "http://172.17.16.1:8080/v1/AUTH_%(tenant_id)s" --internalurl "http://172.17.16.1:8080/v1/AUTH_%(tenant_id)s" --adminurl "http://172.17.16.1:8080/v1/AUTH_%(tenant_id)s"
+
+(10)
+unset OS_SERVICE_TOKEN
+unset OS_SERVICE_ENDPOINT

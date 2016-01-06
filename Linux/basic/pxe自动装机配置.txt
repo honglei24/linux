@@ -1,0 +1,139 @@
+准备：两台机器，一台是控制机器，一台是PXE客户机
+
+设置：
+1.修改PXE客户机的启动顺序，把从PXE网卡启动放在第一位。
+
+2.控制机器配置
+2.0 准备镜像
+# mount /dev/cdrom /media
+如果是外置光驱，设备名就不是/dev/cdrom了
+
+修改yum配置文件
+# vi /etc/yum.repos.d/CentOS-Media.repo
+[c6-media]
+name=CentOS-$releasever - Media
+baseurl=file:///media
+gpgcheck=0
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6
+
+2.1 tftp配置
+# yum --disablerepo=\* --enablerepo=c6-media install xinetd tftp tftp-server
+# vi /etc/xinetd.d/tftp
+service tftp
+{
+        disable = no
+        socket_type             = dgram
+        protocol                = udp
+        wait                    = yes
+        user                    = root
+        server                  = /usr/sbin/in.tftpd
+        server_args             = -s /tftpboot
+        per_source              = 11
+        cps                     = 100 2
+        flags                   = IPv4
+}
+
+# mkdir /tftpboot
+
+2.2 http配置
+# yum --disablerepo=\* --enablerepo=c6-media install httpd
+默认配置
+
+2.3 dhcp配置
+# yum --disablerepo=\* --enablerepo=c6-media install dhcp
+# vi /etc/dhcp/dhcpd.conf
+default-lease-time 600;
+max-lease-time 7200;
+
+allow booting;
+allow bootp;
+
+subnet 192.168.0.0 netmask 255.255.255.0 {
+  range 192.168.0.100 192.168.0.200;
+  option domain-name "domain";
+  default-lease-time 600;
+  max-lease-time 72000;
+  next-server 192.168.0.1;
+  filename "/pxelinux.0";
+}
+
+# yum --disablerepo=\* --enablerepo=c6-media yum install syslinux
+
+3 准备镜像
+# cp -rf /media/* /var/www/html
+# cp /usr/share/syslinux/pxelinux.0 /tftpboot/
+# cp /var/www/html/isolinux/{vmlinuz,initrd.img,boot.msg,splash.jpg,vesamenu.c32} /tftpboot
+
+# mkdir -p /tftpboot/pxelinux.cfg
+# cp /var/www/html/isolinux/isolinux.cfg /tftpboot/default
+# vi /tftpboot/default
+#####################################################################################################
+......
+label linux
+  menu label ^Install or upgrade an existing system
+  menu default
+  kernel vmlinuz
+  append ks=http://192.168.0.1/ks.cfg initrd=initrd.img
+......
+#####################################################################################################
+
+
+# vi /var/www/html/ks.cfg
+#####################################################################################################
+#platform=x86, AMD64, or Intel EM64T
+#version=DEVEL
+# Firewall configuration
+firewall --disabled
+# Install OS instead of upgrade
+install
+# Use network installation
+url --url="http://192.168.0.1/"
+# Root password
+rootpw --iscrypted $1$pTlkEL4p$3b4uKBOIEbW40/t7xUWAd.
+# System authorization information
+auth  --useshadow  --passalgo=sha512
+# Use text mode install
+text
+# System keyboard
+keyboard us
+# System language
+lang en_US
+# SELinux configuration
+selinux --disabled
+# Do not configure the X Window System
+skipx
+# Installation logging level
+logging --level=info
+# Reboot after installation
+reboot
+# System timezone
+timezone  Asia/Shanghai
+# Network information
+network  --bootproto=static --device=eth0 --gateway=192.168.0.254 --ip=192.168.0.20 --netmask=255.255.255.0 --onboot=on
+# System bootloader configuration
+bootloader --location=mbr
+# Clear the Master Boot Record
+zerombr
+# Partition clearing information
+clearpart --all --initlabel
+# Disk partitioning information
+part /boot --fstype="ext4" --size=1000
+part / --fstype="ext4" --size=40000
+
+%packages
+@base
+device-mapper-persistent-data
+dos2unix
+
+%end
+
+#####################################################################################################
+
+4. 启动服务
+# /etc/init.d/dhcpd start
+# /etc/init.d/httpd start
+# /etc/init.d/xinetd start
+
+5.PXE客户机开机
+出现菜单，选择第一个即可，会按照ks.cfg的配置完成装机。

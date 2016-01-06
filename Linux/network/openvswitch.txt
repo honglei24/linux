@@ -1,0 +1,13 @@
+ovs-vsctl add-br br0
+ovs-vsctl add-port br0 eth0
+
+
+ovs-vsctl add-port br0 port1 tan=1
+ovs-vsctl add-port br0 port2 tan=2
+
+ovs-vsctl set Interface port1 type=internal
+ifconfig port1 192.168.1.1 netmask 255.255.255.0
+
+ovs-vsctl set Interface port2 type=internal
+ifconfig port2 192.168.2.1 netmask 255.255.255.0
+

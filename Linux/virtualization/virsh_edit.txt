@@ -1,0 +1,30 @@
+1.VMを起動するAZ管理Nodeにログイン
+# ssh 10.3.0.1
+
+2.MACアドレスを編集するVMのName(もしくはId)を確認。
+
+# virsh list --all
+ Id    Name                           State
+----------------------------------------------------
+ 1     zone-infra-ntp1                running
+ 2     zone-infra-ope1                running
+ 3     km-encrypt1                    running
+
+3.MACを編集するVMの停止(念のため)
+
+# virsh stop km-encrypt1
+
+4.対象のVMのMACを編集(※viでの操作になります。)
+
+# virsh edit km-encrypt1
+    <interface type='bridge'>
+      <mac address='2c:d4:44:35:97:01'/>★ここを編集
+      <source bridge='brbond0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+
+[wq!]
+
+5.VMの起動
+
+# virsh start km-encrypt1

@@ -1,0 +1,11 @@
+losetup -f
+losetup /dev/loop1 /dev/csm/vdisk_4793dd92-f8e9-48d5-b267-19a3f84cc0a6
+fdisk /dev/loop1
+kpartx -a /dev/loop1
+mkdir /data
+mount /dev/mapper/loop1p1 /data
+umount /data
+rmdir /data/
+kpartx -d /dev/loop1
+losetup -d /dev/loop1
+losetup -a

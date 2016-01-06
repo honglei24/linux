@@ -1,0 +1,7 @@
+cpio –idcmv < 文件名解压
+
+制作cpio格式initrd
+非常简单：
+1. find . | cpio -c -o > initrd.img
+2. gzip initrd.img
+3. mv initrd.img.gz initrd.img

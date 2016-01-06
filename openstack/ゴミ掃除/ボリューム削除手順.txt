@@ -1,0 +1,52 @@
+★★★注意
+★★★以下はDBからボリュームを削除する手順です。
+★★★"#"の後は実施コマンドです。
+★★★特に説明しなければ、実施サーバーはコントロールノードになります。
+
+1.ソースをインポートする。
+keystone_scをコントロールノードの/root/に転送する。
+ユーザ名、パスワード、テナント名は環境に合わせて設定する。
+# source /root/keystone_sc
+
+2.削除したいボリュームのIDを確認する。以下にボリューム表示名は「hl_test」を例として説明します。
+# nova volume-list --all-tenant | grep hl_test
+| d2d47b81-bdb1-47cf-ae50-95c4738a3f80 | in-use         | hl_test          | 1    | Performance | 1d880ee1-8560-4878-8d50-706c61bab170 |
+
+3.ステップ3で確認したホストにログインする。
+# ssh storage
+
+4.実施サーバーはスドレージサーバーです。
+5.1. ボリュームのLV Pathを確認する。
+# lvdisplay | grep d2d47b81-bdb1-47cf-ae50-95c4738a3f80
+  LV Path                /dev/cinder-volumes/volume-d2d47b81-bdb1-47cf-ae50-95c4738a3f80
+  LV Name                volume-d2d47b81-bdb1-47cf-ae50-95c4738a3f80
+
+5.2. ボリュームを削除する
+targetID確認
+# tgtadm --op show --mode target | grep d2d47b81-bdb1-47cf-ae50-95c4738a3f80
+Target 2: iqn.2010-10.org.openstack:volume-d2d47b81-bdb1-47cf-ae50-95c4738a3f80
+            Backing store path: /dev/cinder-volumes/volume-d2d47b81-bdb1-47cf-ae50-95c4738a3f80
+
+targetIDよりtarget解除
+# tgtadm --op show --mode target --op delete --tid 2
+
+LV Pathよりボリューム削除
+# lvremove /dev/cinder-volumes/volume-d2d47b81-bdb1-47cf-ae50-95c4738a3f80
+Do you really want to remove active logical volume volume-d2d47b81-bdb1-47cf-ae50-95c4738a3f80? [y/n]: y
+  Logical volume "volume-d2d47b81-bdb1-47cf-ae50-95c4738a3f80" successfully removed
+
+
+# exit
+
+6.実施サーバーはコントロールノードに戻る。
+deletevolume.shをコントロールノードの/root/に転送する。
+deletevolume.shの4行目のユーザー名とパスワードを環境に合わせて修正する。
+# vi /root/deletevolume.sh
+# chmod +x /root/deletevolume.sh
+ボリュームIDよりDBのデータを削除する
+# /root/deletevolume.sh d2d47b81-bdb1-47cf-ae50-95c4738a3f80
+ボリューム削除することを確認する。
+# nova volume-list --all-tenant | grep hl_test
+対象ボリュームが存在しないこと。
+
+--以上

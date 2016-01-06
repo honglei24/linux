@@ -1,0 +1,35 @@
+DBサーバ切り替え・internalテーブル参照手順
+
+・本手順はKeystoneのVMとDBのVMをイメージから構築した後に実行してください
+
+＜手順一覧＞
+0. 確認
+1. /etc/keystone.confの修正
+2. keystoneの再起動
+
+＜手順詳細＞
+0. 確認　【対象：DBサーバ】
+・DBで以下の設定が完了していることを確認
+　-keystoneユーザに外部からの接続権限が与えられている
+　-デフォルトのendpointテーブルと同じ構造のinternalテーブルが
+　keystoneデータベースに作成されている
+　-iptablesで3306ポートの通信が許可されている
+
+
+1. /etc/keystone/keystone.confの修正　【対象：ROR構築用keystoneサーバ】
+・[database]セクションのconnectionを以下の通り修正
+★外部、内部両方のKeystoneで実施
+　-<controller>は接続先DBのアドレス
+========================================================
+connection = mysql://keystone:password@<controller>/keystone
+========================================================
+
+★もう1箇所修正必要
+defaultを何かに変えていた
+→白取さん
+
+2. keystoneの再起動　【対象：keystoneサーバ】
+・以下のコマンドを実行
+★外部、内部両方のKeystoneで実施
+# service openstack-keystone restart
+

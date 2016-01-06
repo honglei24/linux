@@ -1,0 +1,12 @@
+#!/bin/bash
+oldext="txt"
+newext="jpg"
+dir=$(eval pwd)
+
+for file in $(ls $dir | grep .$oldext)
+        do
+        name=$(ls $file | cut -d. -f1)
+        name=$name".conf"
+        mv $file ${name}
+        done
+echo "change  done!"

@@ -1,0 +1,18 @@
+■全利用者Dom0設定
+XENもKVMも以下手順でVLAN75を設定
+
+OS再起動なしで有効にする手順
+# vconfig add sha1 75
+# ifconfig sha1.75 172.32.0.33/22
+
+OS再起動後にも有効にする手順
+# vi /etc/sysconfig/network-scripts/ifcfg-sha1.75
+----------------------------------
+DEVICE=sha1.75
+IPADDR=172.32.0.33
+NETMASK=255.255.252.0
+BOOTPROTO=static
+ONBOOT=yes
+DEVICETYPE=sha
+HOTPLUG=no
+

@@ -1,0 +1,83 @@
+■参考資料
+■networkのstackが消えないときはエラーとなるポートを以下でupdate
+neutron --insecure port-update 【port-id】 --device_owner ""
+neutron --insecure port-update 7877a7d2-7b37-4214-8220-a34c711cb671 --device_owner ""
+
+■routerのroutesを消す場合
+neutron router-update 【router-id】  --routes action=clear
+neutron router-update 77f6feed-52e9-49f5-bacd-b14bd5af9b72 --routes action=clear
+
+
+■heatでoutputを確認する方法
+[root@ror-heat2 noelb]# heat output-list e5975717-f9a3-4b0f-80a8-c98c9a217154
++------------------------------+----------------------+
+| output_key                   | description          |
++------------------------------+----------------------+
+| service_network_connector_id | Network connector ID |
++------------------------------+----------------------+
+[root@ror-heat2 noelb]#  heat output-show e5975717-f9a3-4b0f-80a8-c98c9a217154 service_network_connector_id
+"71cacf5f-418c-44a2-b626-9244437c8b4d"
+
+
+■ルーティングフルセット
+neutron router-update 【ルータ名】 --routes type=dict list=true \
+destination=10.3.0.0/24,nexthop=172.17.1.254 \
+destination=10.7.0.0/24,nexthop=172.17.1.254 \
+destination=100.97.0.0/24,nexthop=172.17.1.97 \
+destination=100.99.0.0/24,nexthop=172.17.1.99 \
+destination=172.16.22.0/24,nexthop=172.17.22.253 \ ←AZ間用
+destination=172.17.11.0/24,nexthop=172.17.1.11 \  ←ここから下の自分のセグメントを削除
+destination=172.17.12.0/24,nexthop=172.17.1.12 \
+destination=172.17.13.0/24,nexthop=172.17.1.13 \
+destination=172.17.14.0/24,nexthop=172.17.1.14 \
+destination=172.17.15.0/24,nexthop=172.17.1.15 \
+destination=172.17.16.0/24,nexthop=172.17.1.16 \
+destination=172.17.17.0/24,nexthop=172.17.1.17 \
+destination=172.17.18.0/24,nexthop=172.17.1.18 \
+destination=172.17.19.0/24,nexthop=172.17.1.19 \
+destination=172.17.20.0/24,nexthop=172.17.1.20 \
+destination=172.17.21.0/24,nexthop=172.17.1.21 \
+destination=172.17.22.0/24,nexthop=172.17.1.22 \
+destination=172.17.23.0/24,nexthop=172.17.1.23 \
+destination=172.17.24.0/24,nexthop=172.17.1.24 \
+destination=172.17.25.0/24,nexthop=172.17.1.25 \
+destination=172.17.26.0/24,nexthop=172.17.1.26 \
+destination=172.17.27.0/24,nexthop=172.17.1.27 \
+destination=172.17.28.0/24,nexthop=172.17.1.28 \
+destination=172.17.29.0/24,nexthop=172.17.1.29 \
+destination=172.17.30.0/24,nexthop=172.17.1.30 \
+destination=172.17.31.0/24,nexthop=172.17.1.31 \
+destination=172.17.4.0/23,nexthop=172.17.1.4 \
+destination=172.17.7.0/24,nexthop=172.17.1.4
+
+
+
+■トークン取得
+export PATH=/opt/FJSVrorcpf/sys:$PATH
+
+□oss
+TOKEN=`curl -s -X POST http://10.7.0.201:5000/v2.0/tokens \
+-d '{"auth": {"passwordCredentials": {"username":"oss", "password":"xjfi5Iv5p[kzFzhq"}, "tenantName":"oss"}}' \
+-H "Content-type: application/json" |  jq -r .access.token.id`
+
+□admin
+TOKEN=`curl -s -X POST http://10.7.0.201:5000/v2.0/tokens \
+-d '{"auth": {"passwordCredentials": {"username":"admin", "password":"nes2n:cl4nsBJarh"}, "tenantName":"admin"}}' \
+-H "Content-type: application/json" |  jq -r .access.token.id`
+
+□loadbalancing(elb)
+TOKEN=`curl -s -X POST http://10.7.0.201:5000/v2.0/tokens \
+-d '{"auth": {"passwordCredentials": {"username":"loadbalancing", "password":"8vurrslbZ-a9bqoA"}, "tenantName":"service"}}' \
+-H "Content-type: application/json" |  jq -r .access.token.id`
+
+□dbaas
+TOKEN=`curl -s -X POST http://10.7.0.201:5000/v2.0/tokens \
+-d '{"auth": {"passwordCredentials": {"username":"database", "password":"ftZvf[tttq8Cavi8"}, "tenantName":"database"}}' \
+-H "Content-type: application/json" |  jq -r .access.token.id`
+
+
+
+
+
+
+

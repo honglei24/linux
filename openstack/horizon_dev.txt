@@ -1,0 +1,34 @@
+搭建dashboard开发环境
+以下全是普通用户身份运行
+在运行controller的节点（dashboard的节点）上进行以下操作。
+原理，强大的Django本身提供了Web服务器构架的功能。开发环境测试，不是用修改正常的dashboard。
+dashboard作为开发测试，提供了开发环境大搭建的脚本方法。
+这个其实就是web服务器简单的配置。在一个节点上配置多个不同url，通常有两种方法：
+一是基于IP的 使用多个IP地址，因为linux可以设置一个网卡多个IP。
+二是基于端口的  不同的url使用不同的端口，这就是本文采用的方法。
+主要步骤为搭建环境，配置接入参数，运行服务。
+A、准备
+cd ~
+pwd
+/home/clw
+mkdir github
+cd github
+git clone https://github.com/openstack/horizon.git
+cd horizon
+git pull
+cd ~
+mkdir src 
+cd src
+cp -r ~/github/horizon  src/
+cd src/horizon
+cp   ~/src/horizon/openstack_dashboard/local/local_settings.py.example  ~/src/horizon/openstack_dashboard/local/local_settings.py
+B、搭建一个环境
+cd  ~/src/horizon
+sudo python tools/install_venv.py
+source .venv/bin/activate
+python manage.py runserver 0.0.0.0:8080
+在运行runserver 服务后，在服务器的后台就运行了一个服务。
+在本地就可以通过浏览器中输入192.168.1.125:8080
+用户名admin
+密码openstack登录
+浏览器一定要使用支持html5的浏览器，推荐使用最新firefox和chrome ,IE9兼容性还是很不好。

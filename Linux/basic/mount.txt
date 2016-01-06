@@ -1,0 +1,5 @@
+nfs£º
+mount -t cifs //10.167.129.4/it-resource/Linux/OS/CentOS -o username=user,passwork=fnst,rw /mnt
+
+iso:
+mount -o loop /mnt/CentOS-6.5-x86_64-bin-DVD1.iso /media/

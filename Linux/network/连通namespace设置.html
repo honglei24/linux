@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    
+    <title>namespace连通手顺</title>
+   </head>
+<body>
+
+<h2>###在网络节点上执行###</h2>
+<pre>
+1.在network节点上执行命令ovs-vsctl show
+[root@nu-01-1-ps0003-02-20 ~]# ovs-vsctl show
+5e11991c-64ff-4d05-8298-731af3227b6b
+    Bridge br-int
+        Port "qr-65f1c21d-4e"
+            tag: 1
+            Interface "qr-65f1c21d-4e"
+                type: internal
+        Port patch-tun
+            Interface patch-tun
+                type: patch
+                options: {peer=patch-int}
+        Port "tapf3e0384a-56"
+            tag: 2
+            Interface "tapf3e0384a-56"
+                type: internal
+        Port "tap367f4962-1e"
+            tag: 1
+            Interface "tap367f4962-1e"
+                type: internal
+        Port br-int
+            Interface br-int
+                type: internal
+                ......
+假设要连接的是qr-65f1c21d-4e，确认tag为1
+确认qr-65f1c21d-4e的IP为192.168.1.1
+
+2.用ovs-ofctl show br-tun确认bu-tun上的接口编号。如下最大编号为2
+[root@nu-01-1-ps0003-02-20 tmp]# ovs-ofctl show br-tun
+OFPT_FEATURES_REPLY (xid=0x2): dpid:0000dab01a6a3c49
+n_tables:254, n_buffers:256
+capabilities: FLOW_STATS TABLE_STATS PORT_STATS QUEUE_STATS ARP_MATCH_IP
+actions: OUTPUT SET_VLAN_VID SET_VLAN_PCP STRIP_VLAN SET_DL_SRC SET_DL_DST SET_NW_SRC SET_NW_DST SET_NW_TOS SET_TP_SRC SET_TP_DST ENQUEUE
+ 1(patch-int): addr:a2:07:bb:79:c6:4b
+     config:     0
+     state:      0
+     speed: 0 Mbps now, 0 Mbps max
+ 2(gre-0a04081f): addr:be:54:35:40:0f:dc
+     config:     0
+     state:      0
+     speed: 0 Mbps now, 0 Mbps max
+ LOCAL(br-tun): addr:da:b0:1a:6a:3c:49
+     config:     0
+     state:      0
+     speed: 0 Mbps now, 0 Mbps max
+OFPT_GET_CONFIG_REPLY (xid=0x4): frags=normal miss_send_len=0
+
+3.在br-tun上追加一个接口p0,并设置相应的选项
+# ovs-vsctl add-port br-tun p0 -- set Interface p0 ofport_request=3
+# ovs-vsctl set Interface p0 type=gre
+# ovs-vsctl set Interface p0 options:in_key=flow options:local_ip="10.4.8.30" options:out_key=flow options:remote_ip="10.4.8.32"
+
+4.追加并修改flow规则
+转发表按实际的值而定
+# ovs-ofctl add-flow br-tun "table=0,priority=1,in_port=3 actions=resubmit(,2)"
+
+在原有规则上追加【output:3】
+# ovs-ofctl mod-flows table=21,dl_vlan=1 actions=strip_vlan,set_tunnel:0x1,output:2,output:3
+# ovs-ofctl mod-flows br-tun table=21,dl_vlan=1 actions=strip_vlan,set_tunnel:0x1,output:2,output:3
+# ovs-ofctl mod-flows br-tun "table=21,dl_vlan=1 actions=strip_vlan,set_tunnel:0x1,output:2,output:3"
+</pre>
+<h2>###在连接发起的机器上执行###</h2>
+<pre>
+5.追加桥和相应的接口
+# ovs-vsctl add-br ovs-switch
+# ovs-vsctl add-port ovs-switch p0 -- set Interface p0 ofport_request=1
+# ovs-vsctl set Interface p0 type=internal
+# ip addr add 192.168.1.254/24 dev p0
+# ifconfig p0 promisc up
+# ovs-vsctl add-port ovs-switch p1 -- set Interface p1 ofport_request=2
+# ovs-vsctl set Interface p1 type=gre
+# ovs-vsctl set Interface p1 options:in_key=flow options:local_ip="10.4.8.32" options:out_key=flow options:remote_ip="10.4.8.30"
+
+6.修改flow规则
+# ovs-ofctl del-flows ovs-switch table=0
+# ovs-ofctl add-flows ovs-switch "table=0,priority=1,in_port=1 actions=resubmit(,1)"
+# ovs-ofctl add-flows ovs-switch "table=0,priority=1,in_port=2 actions=resubmit(,2)"
+# ovs-ofctl add-flows ovs-switch "table=0,priority=1,in_port=2 actions=resubmit(,2)"
+# ovs-ofctl add-flows ovs-switch "table=0,priority=0 actions=resubmit(,1)"
+# ovs-ofctl add-flows ovs-switch "table=1,priority=1,dl_dst=00:00:00:00:00:00/01:00:00:00:00:00 actions=resubmit(,20)"
+# ovs-ofctl add-flows ovs-switch "table=1,priority=1,dl_dst=01:00:00:00:00:00/01:00:00:00:00:00 actions=resubmit(,21)"
+# ovs-ofctl add-flows ovs-switch "table=2,priority=1,tun_id=0x1 actions=strip_vlan,resubmit(,10)"
+# ovs-ofctl add-flows ovs-switch "table=2,priority=0 actions=strip_vlan,resubmit(,10)"
+# ovs-ofctl add-flows ovs-switch "table=3,priority=0 actions=drop"
+# ovs-ofctl add-flows ovs-switch "table=10,priority=1 actions=learn(table=20,hard_timeout=300,priority=1,NXM_OF_VLAN_TCI[0..11],NXM_OF_ETH_DST[]=NXM_OF_ETH_SRC[],load:0->NXM_OF_VLAN_TCI[],load:NXM_NX_TUN_ID[]->NXM_NX_TUN_ID[],output:NXM_OF_IN_PORT[]),output:1"
+# ovs-ofctl add-flows ovs-switch "table=20,priority=0 actions=resubmit(,21)"
+# ovs-ofctl add-flows ovs-switch "table=21,dl_vlan=1 actions=strip_vlan,set_tunnel:0x1,output:2"
+# ovs-ofctl add-flows ovs-switch "table=21,priority=0 actions=strip_vlan,set_tunnel:0x1,output:2"
+
+7.确认[root@nu-01-1-ps0003-02-22 ~]# ping 192.168.1.1
+PING 192.168.1.1 (192.168.1.1) 56(84) bytes of data.
+64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=3.88 ms
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=0.193 ms
+64 bytes from 192.168.1.1: icmp_seq=3 ttl=64 time=0.181 ms
+64 bytes from 192.168.1.1: icmp_seq=4 ttl=64 time=0.183 ms
+64 bytes from 192.168.1.1: icmp_seq=5 ttl=64 time=0.183 ms
+
+--以上
+</pre>
+</p>
+</body>
+</html>

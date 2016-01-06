@@ -1,0 +1,32 @@
+★★★注意
+★★★以下はDBからイメージを削除する手順です。
+★★★"#"の後は実施コマンドです。
+★★★特に説明しなければ、実施サーバーはコントロールノードになります。
+
+1.ソースをインポートする。
+admin_scをコントロールノードの/root/に転送する。
+ユーザ名、パスワード、テナント名は環境に合わせて設定する。
+# source /root/admin_sc
+
+2.削除したいイメージのIDを確認する。以下にイメージ表示名は「hl_test」を例として説明します。
+# nova image-list | grep hl_test
+| 31b56e55-ed49-4564-96b0-cf7e1526e3ab | hl_test                   | ACTIVE |                                      |
+
+3.イメージファイル削除する。
+# rm -rf /var/lib/glance/images/31b56e55-ed49-4564-96b0-cf7e1526e3ab
+# ll /var/lib/glance/images/31b56e55-ed49-4564-96b0-cf7e1526e3ab
+ls: cannot access /var/lib/glance/images/31b56e55-ed49-4564-96b0-cf7e1526e3ab: No such file or directory
+
+6.実施サーバーはコントロールノードに戻る。
+deleteimage.shをコントロールノードの/root/に転送する。
+deleteimage.shの4行目のユーザー名とパスワードを環境に合わせて修正する。
+# vi /root/deleteimage.sh
+# chmod +x /root/deleteimage.sh
+イメージIDよりDBのデータを削除する
+# /root/deleteimage.sh 31b56e55-ed49-4564-96b0-cf7e1526e3ab
+
+イメージ削除することを確認する。
+# # nova image-list | grep hl_test
+対象イメージが存在しないこと。
+
+--以上

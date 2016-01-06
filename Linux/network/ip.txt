@@ -1,0 +1,168 @@
+ip
+
+ip 是個指令喔！並不是那個 TCP/IP 的 IP 啦！這個 ip 指令的功能可多了！ 基本上，他就是整合了 ifconfig 與 route 這兩個指令囉～不過， ip 可以達成的功能卻又多更多！ 真是個相當厲害的指令。如果您有興趣的話，請自行 vi /sbin/ifup ，就知道整個 ifup 就是利用 ip 這個指令來達成的。好了，如何使用呢？讓我們來瞧一瞧先！
+[root@linux ~]# ip [option] [動作] [指令]
+參數：
+option ：設定的參數，主要有：
+    -s ：顯示出該裝置的統計數據(statistics)，例如總接受封包數等；
+動作：亦即是可以針對哪些網路參數進行動作，包括有：
+    link  ：關於裝置 (device) 的相關設定，包括 MTU, MAC 位址等等
+    addr/address ：關於額外的 IP 協定，例如多 IP 的達成等等；
+    route ：與路由有關的相關設定
+由上面的語法我們可以知道， ip 除了可以設定一些基本的網路參數之外，還能夠進行額外的 IP 協定， 包括多 IP 的達成，真是太完美了！底下我們就分三個部分 (link, addr, route) 來介紹這個 ip 指令吧！
+關於裝置介面 (device) 的相關設定： ip link
+ip link 可以設定與裝置 (device) 有關的相關設定，包括 MTU 以及該網路介面的 MAC 等等， 當然也可以啟動 (up) 或關閉 (down) 某個網路介面啦！整個語法是這樣的：
+[root@linux ~]# ip [-s] link show  
+[root@linux ~]# ip link set [device] [動作與參數]
+參數：
+show：僅顯示出這個裝置的相關內容，如果加上 -s 會顯示更多統計數據；
+set ：可以開始設定項目， device 指的是 eth0, eth1 等等介面代號；
+動作與參數：包括有底下的這些動作：
+   up|down  ：啟動 (up) 或關閉 (down) 某個介面，其他參數使用預設的乙太網路；
+   address  ：如果這個裝置可以更改 MAC 的話，用這個參數修改！
+   name     ：給予這個裝置一個特殊的名字；
+   mtu      ：就是最大傳輸單元啊！
+範例一：顯示出所有的介面資訊
+[root@linux ~]# ip link show
+1: lo:  mtu 16436 qdisc noqueue
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0:  mtu 1500 qdisc pfifo_fast qlen 1000
+    link/ether 00:50:fc:22:9a:cb brd ff:ff:ff:ff:ff:ff
+3: sit0:  mtu 1480 qdisc noop
+    link/sit 0.0.0.0 brd 0.0.0.0
+[root@linux ~]# ip -s link show eth0
+2: eth0:  mtu 1500 qdisc pfifo_fast qlen 1000
+    link/ether 00:50:fc:22:9a:cb brd ff:ff:ff:ff:ff:ff
+    RX: bytes  packets  errors  dropped overrun mcast
+    484011792  2247372  0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    2914104290 2867753  0       0       0       0
+使用 ip link show 可以顯示出整個裝置介面的硬體相關資訊，如上所示，包括網卡位址(MAC)、MTU等等， 比較有趣的應該是那個 sit0 的介面了，那個 sit0 的介面是用在 IPv4 及 IPv6 的封包轉換上的， 對於我們僅使用 IPv4 的網路是沒有作用的。 lo 及 sit0 都是主機內部所自行設定的。 而如果加上 -s 的參數後，則這個網路卡的相關統計資訊就會被列出來， 包括接收 (RX) 及傳送 (TX) 的封包數量等等，詳細的內容與 ifconfig 所輸出的結果相同的。
+範例二：啟動、關閉與設定裝置的相關資訊
+[root@linux ~]# ip link set eth0 up
+# 啟動 eth0 這個裝置介面；
+[root@linux ~]# ip link set eth0 down
+# 阿就關閉啊！簡單的要命～
+[root@linux ~]# ip link set eth0 mtu 1000
+# 更改 MTU 的值，達到 1000 bytes，單位就是 bytes 啊！
+更新網路卡的 MTU 使用 ifconfig 也可以達成啊！沒啥了不起，不過，如果是要更改『網路卡代號、 MAC 位址的資訊』的話，那可就得使用 ip 囉～不過，設定前得要先關閉該網路卡，否則會不成功。 如下所示：
+範例三：修改網路卡代號、MAC 等參數
+[root@linux ~]# ip link set eth0 name vbird
+SIOCSIFNAME: Device or resource busy
+# 因為該裝置目前是啟動的，所以不能這樣做設定。你應該要這樣做：
+[root@linux ~]# ip link set eth0 down      
+[root@linux ~]# ip link set eth0 name vbird
+[root@linux ~]# ip link show               
+2. vbird:  mtu 900 qdisc pfifo_fast qlen 1000
+    link/ehter 00:40:d0:13:c3:46 brd ff:ff:ff:ff:ff:ff
+# 怕了吧！連網路卡代號都可以改變！不過，玩玩後記得改回來啊！
+# 因為我們的 ifcfg-eth0 還是使用原本的裝置代號！避免有問題，要改回來
+[root@linux ~]# ip link set vbird name eth0
+[root@linux ~]# ip link set eth0 address aa:aa:aa:aa:aa:aa
+[root@linux ~]# ip link show eth0
+# 如果你的網路卡支援硬體位址 (MAC) 可以更改的話，
+# 那麼上面這個動作就可以更改你的網路卡位址了！厲害吧！
+# 不過，還是那句老話，測試完之後請立刻改回來啊！
+在這個裝置的硬體相關資訊設定上面，包括 MTU, MAC 以及傳輸的模式等等，都可以在這裡設定。 有趣的是那個 address 的項目，那個項目後面接的可是硬體位址 (MAC) 而不是 IP 喔！ 很容易搞錯啊！切記切記！更多的硬體參數可以使用 man ip 查閱一下與 ip link 有關的設定。
+關於額外的 IP 相關設定： ip address
+如果說 ip link 是與
+OSI 七層協定
+的第二層資料連階層有關的話，那麼 ip address (ip addr) 就是與第三層網路層有關的參數啦！ 主要是在設定與 IP 有關的各項參數，包括 netmask, broadcast 等等。
+[root@linux ~]# ip address show   
+[root@linux ~]# ip address [add|del] [IP參數] [dev 裝置名] [相關參數]
+參數：
+show    ：單純的顯示出介面的 IP 資訊啊；
+add|del ：進行相關參數的增加 (add) 或刪除 (del) 設定，主要有：
+    IP 參數：主要就是網域的設定，例如 192.168.100.100/24 之類的設定喔；
+    dev    ：這個 IP 參數所要設定的介面，例如 eth0, eth1 等等；
+    相關參數：主要有底下這些：
+        broadcast：設定廣播位址，如果設定值是 + 表示『讓系統自動計算』
+        label    ：亦即是這個裝置的別名，例如 eth0:0 就是了！
+        scope    ：這個介面的領域，通常是這幾個大類：
+                   global ：允許來自所有來源的連線；
+                   site   ：僅支援 IPv6 ，僅允許本主機的連線；
+                   link   ：僅允許本裝置自我連線；
+                   host   ：僅允許本主機內部的連線；
+                   所以當然是使用 global 囉！預設也是 global 啦！
+範例一：顯示出所有的介面之 IP 參數：
+[root@linux ~]# ip address show
+1: lo:  mtu 16436 qdisc noqueue
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: eth0:  mtu 1500 qdisc pfifo_fast qlen 1000
+    link/ether 00:50:fc:22:9a:cb brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.2/24 brd 192.168.1.255 scope global eth0
+    inet6 fe80::250:fcff:fe22:9acb/64 scope link
+       valid_lft forever preferred_lft forever
+3: sit0:  mtu 1480 qdisc noop
+    link/sit 0.0.0.0 brd 0.0.0.0
+看到上面那個特殊的字體嗎？沒錯！那就是 IP 參數啦！也是 ip address 最主要的功能。 底下我們進一步來新增虛擬的網路介面試看看：
+範例二：新增一個介面，名稱假設為 eth0:vbird
+[root@linux ~]# ip address add 192.168.50.50/24 broadcast + \
+> dev eth0 label eth0:vbird
+[root@linux ~]# ip address show eth0
+2: eth0:  mtu 1500 qdisc pfifo_fast qlen 1000
+    link/ether 00:40:d0:13:c3:46 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.100/24 brd 192.168.1.255 scope global eth0
+    inet 192.168.50.50/24 brd 192.168.50.255 scope global eth0:vbird
+    inet6 fe80::240:d0ff:fe13:c346/64 scope link
+       valid_lft forever preferred_lft forever
+# 看到上面的特殊字體了吧？多出了一行新的介面，且名稱是 eth0:vbird
+# 至於那個 broadcast + 也可以寫成 broadcast 192.168.50.255 啦！
+[root@linux ~]# ifconfig
+eth0:vbir Link encap:Ethernet  HWaddr 00:40:D0:13:C3:46
+          inet addr:192.168.50.50  Bcast:192.168.50.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          Interrupt:5 Base address:0x3e00
+# 如果使用 ifconfig 就能夠看到這個怪東西了！可愛吧！ ^_^
+範例三：將剛剛的介面刪除
+[root@linux ~]# ip address del 192.168.50.50/24 dev eth0
+# 刪除就比較簡單啊！ ^_^
+關於路由的相關設定： ip route
+呵呵，這個項目當然就是路由的觀察與設定囉！事實上， ip route 的功能幾乎與 route 這個指令差不多，但是，他還可以進行額外的參數設計，例如 MTU 的規劃等等，相當的強悍啊！
+[root@linux ~]# ip route show  
+[root@linux ~]# ip route [add|del] [IP或網域] [via gateway] [dev 裝置]
+參數：
+show ：單純的顯示出路由表，也可以使用 list ；
+add|del ：增加 (add) 或刪除 (del) 路由的意思。
+    IP或網域：可使用 192.168.50.0/24 之類的網域或者是單純的 IP ；
+    via     ：從那個 gateway 出去，不一定需要；
+    dev     ：由那個裝置連出去，這就需要了！
+    mtu     ：可以額外的設定 MTU 的數值喔！
+範例一：顯示出目前的路由資料
+[root@linux ~]# ip route show
+192.168.1.0/24 dev eth0  proto kernel  scope link  src 192.168.1.2
+169.254.0.0/16 dev eth1  scope link
+default via 192.168.1.254 dev eth1
+如上表所示，最簡單的功能就是顯示出目前的路由資訊，其實跟 route 這個指令相同啦！ 指示必須要注意幾個小東西：
+
+
+    proto：此路由的路由協定，主要有 redirect, kernel, boot, static, ra 等， 其中 kernel 指的是直接由核心判斷自動設定。
+    scope：路由的範圍，主要是 link ，亦即是與本裝置有關的直接連線。
+
+再來看一下如何進行路由的增加與刪除吧！
+範例二：增加路由，主要是本機直接可溝通的網域
+[root@linux ~]# ip route add 192.168.5.0/24 dev eth0
+# 針對本機直接溝通的網域設定好路由，不需要透過外部的路由器
+[root@linux ~]# ip route show
+192.168.5.0/24 dev eth0  scope link
+....以下省略....
+範例三：增加可以通往外部的路由，需透過 router 喔！
+[root@linux ~]# ip route add 192.168.10.0/24 via 192.168.5.100 dev eth0
+[root@linux ~]# ip route show
+192.168.5.0/24 dev eth0  scope link
+....其他省略....
+192.168.10.0/24 via 192.168.5.100 dev eth0
+# 仔細看喔，因為我有 192.168.5.0/24 的路由存在 (我的網卡直接聯繫)，
+# 所以才可以將 192.168.10.0/24 的路由丟給 192.168.5.100
+# 那部主機來幫忙傳遞喔！與之前提到的 route 指令是一樣的限制！
+範例四：增加預設路由
+[root@linux ~]# ip route add default via 192.168.1.2 dev eth0
+# 那個 192.168.1.2 就是我的預設路由器 (gateway) 的意思啊！ ^_^
+# 真的記得，只要一個預設路由就 OK ！
+範例五：刪除路由
+[root@linux ~]# ip route del 192.168.10.0/24
+[root@linux ~]# ip route del 192.168.5.0/24
+事實上，這個 ip 的指令實在是太博大精深了！剛接觸 Linux 網路的朋友，可能會看到有點暈～ 不要緊啦！您先會使用 ifconfig, ifup , ifdown 與 route 即可， 等以後有經驗了之後，再繼續回來玩 ip 這個好玩的指令吧！ ^_^ 有興趣的話，也可以自行參考 ethtool 這個指令喔！ (man ethtool)。
