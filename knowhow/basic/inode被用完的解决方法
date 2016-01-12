@@ -1,0 +1,5 @@
+df -i 发现/var文件加下inode被用完
+for i in /var/*; do echo $i; find $i | wc -l; done
+
+发现是/var/spool/postfix/postfix文件夹下文件太多,删除该文件夹下的文件
+find /var/spool/postfix/postfix -type f | xargs rm -f
