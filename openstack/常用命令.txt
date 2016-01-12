@@ -1,6 +1,6 @@
-¡ƒ‹[ƒ^î•ñ‚ğW‚ß‚½‚¢•Ò
+â– è·¯ç”±ä¿¡æ¯ç¼–è¾‘
 
-› STEP1
+â—‹ STEP1
 
 [[[Input]]]
 
@@ -9,7 +9,7 @@
 
 [[[Output]]]
 
-[root@ror-zone-inst1 ~]# neutron router-show 457649c8-b5c8-4fe1-83f9-15c68d88ad17
+[root@zone-inst1 ~]# neutron router-show 457649c8-b5c8-4fe1-83f9-15c68d88ad17
 +-----------------------+-----------------------------------------------------------------------------+
 | Field                 | Value                                                                       |
 +-----------------------+-----------------------------------------------------------------------------+
@@ -21,44 +21,19 @@
 |                       | {"destination": "100.97.0.0/16", "nexthop": "172.16.3.253"}                 |
 |                       | {"destination": "100.98.0.0/16", "nexthop": "172.16.3.98"}                  |
 |                       | {"destination": "100.99.0.0/16", "nexthop": "172.16.3.253"}                 |
-|                       | {"destination": "172.16.11.0/24", "nexthop": "172.16.3.11"}                 |
-|                       | {"destination": "172.16.12.0/24", "nexthop": "172.16.3.12"}                 |
-|                       | {"destination": "172.16.13.0/24", "nexthop": "172.16.3.13"}                 |
-|                       | {"destination": "172.16.14.0/24", "nexthop": "172.16.3.14"}                 |
-|                       | {"destination": "172.16.15.0/24", "nexthop": "172.16.3.15"}                 |
-|                       | {"destination": "172.16.16.0/24", "nexthop": "172.16.3.16"}                 |
-|                       | {"destination": "172.16.17.0/24", "nexthop": "172.16.3.17"}                 |
-|                       | {"destination": "172.16.18.0/24", "nexthop": "172.16.3.18"}                 |
-|                       | {"destination": "172.16.19.0/24", "nexthop": "172.16.3.19"}                 |
-|                       | {"destination": "172.16.20.0/24", "nexthop": "172.16.3.20"}                 |
-|                       | {"destination": "172.16.21.0/24", "nexthop": "172.16.3.21"}                 |
-|                       | {"destination": "172.16.22.0/24", "nexthop": "172.16.3.22"}                 |
-|                       | {"destination": "172.16.23.0/24", "nexthop": "172.16.3.23"}                 |
-|                       | {"destination": "172.16.24.0/24", "nexthop": "172.16.3.24"}                 |
-|                       | {"destination": "172.16.25.0/24", "nexthop": "172.16.3.25"}                 |
-|                       | {"destination": "172.16.26.0/24", "nexthop": "172.16.3.26"}                 |
-|                       | {"destination": "172.16.27.0/24", "nexthop": "172.16.3.27"}                 |
-|                       | {"destination": "172.16.28.0/24", "nexthop": "172.16.3.28"}                 |
-|                       | {"destination": "172.16.29.0/24", "nexthop": "172.16.3.29"}                 |
-|                       | {"destination": "172.16.30.0/24", "nexthop": "172.16.3.30"}                 |
-|                       | {"destination": "172.16.31.0/24", "nexthop": "172.16.3.31"}                 |
-|                       | {"destination": "172.16.32.0/24", "nexthop": "172.16.3.32"}                 |
-|                       | {"destination": "172.16.33.0/24", "nexthop": "172.16.3.33"}                 |
-|                       | {"destination": "172.16.34.0/24", "nexthop": "172.16.3.14"}                 |
-|                       | {"destination": "172.17.0.0/16", "nexthop": "172.16.3.253"}                 |
 | status                | ACTIVE                                                                      |
 | tenant_id             | 31ceb599e8ff48aeb66f2fd748988960                                            |
 +-----------------------+-----------------------------------------------------------------------------+
-[root@ror-zone-inst1 ~]#
->[root@ror-zone-inst1 ~]# neutron router-port-list 457649c8-b5c8-4fe1-83f9-15c68d88ad17
+[root@zone-inst1 ~]#
+>[root@zone-inst1 ~]# neutron router-port-list 457649c8-b5c8-4fe1-83f9-15c68d88ad17
 >+--------------------------------------+------+-------------------+---------------------------------------------------------------------------------------+
 >| id                                   | name | mac_address       | fixed_ips                                                                             |
 >+--------------------------------------+------+-------------------+---------------------------------------------------------------------------------------+
 >| 3718e4be-1395-4e7a-a256-25d842af2bff |      | fa:16:3e:72:79:fa | {"subnet_id": "d0adf45f-1ca3-4549-8500-7c9b1cb7846c", "ip_address": "133.162.130.10"} |
 >| ae903d7a-4e5e-4dd2-931b-4efc22ca6c85 |      | fa:16:3e:d4:3a:b2 | {"subnet_id": "15440feb-27a1-424b-916d-2b0a68b786b2", "ip_address": "172.16.3.254"}   |
 >+--------------------------------------+------+-------------------+---------------------------------------------------------------------------------------+
->[root@ror-zone-inst1 ~]#
-[root@ror-zone-inst1 ~]# neutron firewall-list
+>[root@zone-inst1 ~]#
+[root@zone-inst1 ~]# neutron firewall-list
 +--------------------------------------+-----------------------------------+--------------------------------------+
 | id                                   | name                              | firewall_policy_id                   |
 +--------------------------------------+-----------------------------------+--------------------------------------+
@@ -78,8 +53,8 @@
 | fbabfd1d-371d-4545-bab3-3564b9d17128 | az1_secure_firewall               | 3d95a474-dbaa-47be-afc3-5a51d70b0261 |
 | fe37cdc2-2e64-491d-86d5-7ab0b0e23157 | FW_tcp_imcp_ok                    | 97b6d0b8-96f5-424c-b34d-9514a5dcf6b8 |
 +--------------------------------------+-----------------------------------+--------------------------------------+
-[root@ror-zone-inst1 ~]#
-[root@ror-zone-inst1 ~]# neutron firewall-show a9f035f0-7a84-4091-bbd7-e24d5fa1b364
+[root@zone-inst1 ~]#
+[root@zone-inst1 ~]# neutron firewall-show a9f035f0-7a84-4091-bbd7-e24d5fa1b364
 +--------------------+--------------------------------------+
 | Field              | Value                                |
 +--------------------+--------------------------------------+
@@ -92,11 +67,11 @@
 | status             | ACTIVE                               |
 | tenant_id          | 31ceb599e8ff48aeb66f2fd748988960     |
 +--------------------+--------------------------------------+
-[root@ror-zone-inst1 ~]#
+[root@zone-inst1 ~]#
 
-ªªªªª@–ƒNƒ\ì‹Æ–@name‚Å‚í‚©‚ç‚È‚¢ê‡A‘“–‚è‚Å–Ú“–‚Ä‚Ìrouter-id‚ªo‚Ä‚­‚é‚Ü‚Åfirewall-show‚µ‘±‚¯‚é‰H–Ú‚É‚È‚é
+â†‘â†‘â†‘â†‘â†‘ã€€
 
-[root@ror-zone-inst1 ~]# neutron firewall-policy-show 8e80e0da-d518-4086-86c6-f6820aa1fd47
+[root@zone-inst1 ~]# neutron firewall-policy-show 8e80e0da-d518-4086-86c6-f6820aa1fd47
 +----------------+------------------------------------------+
 | Field          | Value                                    |
 +----------------+------------------------------------------+
@@ -104,28 +79,14 @@
 | description    |                                          |
 | firewall_rules | 9f238973-7e70-4ae1-acb1-30980e6fa4f8     |
 |                | b6ebec53-24b0-44b7-8da7-db853c757d80     |
-|                | bba25536-1eaf-42b8-80ad-8c576392b73a     |
-|                | a8839a4f-42a1-4df9-945f-a1d5b992ea1e     |
-|                | 4b54ec79-3ac5-4da5-9170-d5127ce9fd7e     |
-|                | d646c0a8-bbe2-4fea-854d-81eb8f3649fe     |
-|                | 4fd33911-5963-45e7-8af7-a96865a6db20     |
-|                | 1855eac6-d6ef-4a7a-b27b-8c2daee03059     |
-|                | 2bf7b58d-deaa-4fbd-98e9-4ee1654f65ca     |
-|                | 7c1757dc-0ece-4470-b11d-d8d5402e0cbe     |
-|                | 7ebbd57e-7774-4977-b753-df518937c5df     |
-|                | 6cbe8358-d0be-47c9-a5c7-98b9caabb54c     |
-|                | e038a0d3-61b4-48b4-b5dc-90e04c180dd9     |
-|                | f101d9c5-2b9f-46b9-93d4-2b7c59c9ba0c     |
-|                | 82191dac-52e1-487a-b758-9d244318ae01     |
-|                | 33d9733e-2f40-42d6-8e85-c19fa03ea9ef     |
 |                | b727ed2f-6b59-452d-81a5-c6146ad1c58e     |
 | id             | 8e80e0da-d518-4086-86c6-f6820aa1fd47     |
 | name           | az1_admin_firewall_policy_extdmz_service |
 | shared         | False                                    |
 | tenant_id      | 31ceb599e8ff48aeb66f2fd748988960         |
 +----------------+------------------------------------------+
-[root@ror-zone-inst1 ~]#
-[root@ror-zone-inst1 ~]# neutron firewall-rule-show 9f238973-7e70-4ae1-acb1-30980e6fa4f8
+[root@zone-inst1 ~]#
+[root@zone-inst1 ~]# neutron firewall-rule-show 9f238973-7e70-4ae1-acb1-30980e6fa4f8
 +------------------------+---------------------------------------------------------+
 | Field                  | Value                                                   |
 +------------------------+---------------------------------------------------------+
@@ -145,614 +106,512 @@
 | source_port            |                                                         |
 | tenant_id              | 31ceb599e8ff48aeb66f2fd748988960                        |
 +------------------------+---------------------------------------------------------+
-[root@ror-zone-inst1 ~]#
+[root@zone-inst1 ~]#
 
-ªªªªª@–ƒNƒ\ì‹Æ–@firewall_rules‚ÌŠeID‚É‚Â‚¢‚Äfirewall-rule-show‚ª•K—v
+â†‘â†‘â†‘â†‘â†‘ã€€
 
->[root@ror-zone-inst1 ~]# neutron l3-agent-list-hosting-router 457649c8-b5c8-4fe1-83f9-15c68d88ad17
->+--------------------------------------+------------------+----------------+-------+
->| id                                   | host             | admin_state_up | alive |
->+--------------------------------------+------------------+----------------+-------+
->| be0850ca-ea04-46d4-9338-ba9f621e9ddd | jp0a01-pgy004-00 | True           | :-)   |
->+--------------------------------------+------------------+----------------+-------+
->[root@ror-zone-inst1 ~]#
->[root@ror-zone-inst1 ~]# ssh jp0a01-pgy004-00
->root@jp0a01-pgy004-00's password:
->Last login: Mon May 25 02:38:31 2015 from ror-zone-inst1
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# ip netns | grep 457649c8-b5c8-4fe1-83f9-15c68d88ad17
->qrouter-457649c8-b5c8-4fe1-83f9-15c68d88ad17
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# ip netns exec qrouter-457649c8-b5c8-4fe1-83f9-15c68d88ad17 bash
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# ifconfig
->lo        Link encap:Local Loopback
->          inet addr:127.0.0.1  Mask:255.0.0.0
->          inet6 addr: ::1/128 Scope:Host
->          UP LOOPBACK RUNNING  MTU:65536  Metric:1
->          RX packets:2693 errors:0 dropped:0 overruns:0 frame:0
->          TX packets:2693 errors:0 dropped:0 overruns:0 carrier:0
->          collisions:0 txqueuelen:0
->          RX bytes:221929 (216.7 KiB)  TX bytes:221929 (216.7 KiB)
->
->qg-3718e4be-13 Link encap:Ethernet  HWaddr FA:16:3E:72:79:FA
->          inet addr:133.162.130.10  Bcast:133.162.130.255  Mask:255.255.255.0
->          inet6 addr: fe80::f816:3eff:fe72:79fa/64 Scope:Link
->          UP BROADCAST RUNNING  MTU:1500  Metric:1
->          RX packets:104178578 errors:0 dropped:0 overruns:0 frame:0
->          TX packets:68945003 errors:0 dropped:0 overruns:0 carrier:0
->          collisions:0 txqueuelen:0
->          RX bytes:242835805415 (226.1 GiB)  TX bytes:4963094236 (4.6 GiB)
->
->qr-ae903d7a-4e Link encap:Ethernet  HWaddr FA:16:3E:D4:3A:B2
->          inet addr:172.16.3.254  Bcast:172.16.3.255  Mask:255.255.254.0
->          inet6 addr: fe80::f816:3eff:fed4:3ab2/64 Scope:Link
->          UP BROADCAST RUNNING  MTU:1500  Metric:1
->          RX packets:70371417 errors:0 dropped:0 overruns:0 frame:0
->          TX packets:96592643 errors:0 dropped:0 overruns:0 carrier:0
->          collisions:0 txqueuelen:0
->          RX bytes:5624008379 (5.2 GiB)  TX bytes:242945613370 (226.2 GiB)
->
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# ip route show
->blackhole 133.162.131.101  proto static
->blackhole 133.162.131.102  proto static
->blackhole 133.162.131.103  proto static
->blackhole 133.162.131.104  proto static
->blackhole 133.162.131.10  proto static
->blackhole 133.162.131.9  proto static
->172.16.22.0/24 via 172.16.3.22 dev qr-ae903d7a-4e
->172.16.23.0/24 via 172.16.3.23 dev qr-ae903d7a-4e
->172.16.20.0/24 via 172.16.3.20 dev qr-ae903d7a-4e
->172.16.21.0/24 via 172.16.3.21 dev qr-ae903d7a-4e
->172.16.18.0/24 via 172.16.3.18 dev qr-ae903d7a-4e
->172.16.34.0/24 via 172.16.3.14 dev qr-ae903d7a-4e
->172.16.19.0/24 via 172.16.3.19 dev qr-ae903d7a-4e
->172.16.33.0/24 via 172.16.3.33 dev qr-ae903d7a-4e
->172.16.16.0/24 via 172.16.3.16 dev qr-ae903d7a-4e
->172.16.32.0/24 via 172.16.3.32 dev qr-ae903d7a-4e
->172.16.17.0/24 via 172.16.3.17 dev qr-ae903d7a-4e
->172.16.30.0/24 via 172.16.3.30 dev qr-ae903d7a-4e
->172.16.14.0/24 via 172.16.3.14 dev qr-ae903d7a-4e
->172.16.31.0/24 via 172.16.3.31 dev qr-ae903d7a-4e
->172.16.15.0/24 via 172.16.3.15 dev qr-ae903d7a-4e
->172.16.12.0/24 via 172.16.3.12 dev qr-ae903d7a-4e
->172.16.28.0/24 via 172.16.3.28 dev qr-ae903d7a-4e
->172.16.13.0/24 via 172.16.3.13 dev qr-ae903d7a-4e
->172.16.29.0/24 via 172.16.3.29 dev qr-ae903d7a-4e
->172.16.26.0/24 via 172.16.3.26 dev qr-ae903d7a-4e
->172.16.11.0/24 via 172.16.3.11 dev qr-ae903d7a-4e
->172.16.27.0/24 via 172.16.3.27 dev qr-ae903d7a-4e
->133.162.130.0/24 dev qg-3718e4be-13  proto kernel  scope link  src 133.162.130.10
->172.16.24.0/24 via 172.16.3.24 dev qr-ae903d7a-4e
->172.16.25.0/24 via 172.16.3.25 dev qr-ae903d7a-4e
->172.16.2.0/23 dev qr-ae903d7a-4e  proto kernel  scope link  src 172.16.3.254
->100.98.0.0/16 via 172.16.3.98 dev qr-ae903d7a-4e
->100.99.0.0/16 via 172.16.3.253 dev qr-ae903d7a-4e
->100.96.0.0/16 via 172.16.3.96 dev qr-ae903d7a-4e
->100.97.0.0/16 via 172.16.3.253 dev qr-ae903d7a-4e
->172.17.0.0/16 via 172.16.3.253 dev qr-ae903d7a-4e
->default via 133.162.130.1 dev qg-3718e4be-13  proto zebra  metric 100
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# telnet localhost 2601
->Trying ::1...
->telnet: connect to address ::1: Connection refused
->Trying 127.0.0.1...
->Connected to localhost.
->Escape character is '^]'.
->
->Hello, this is Quagga (version 0.99.15).
->Copyright 1996-2005 Kunihiro Ishiguro, et al.
->
->
->User Access Verification
->
->Password:
->jp0a01-pgy004-00> en
->Password:
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh run
->
->Current configuration:
->!
->hostname jp0a01-pgy004-00
->password 8 PaPjMWpxq9MUk
->enable password 8 J0C.WDR1amIt6
->log file /var/log/l3_agent_bgp/zebra_qrouter-457649c8-b5c8-4fe1-83f9-15c68d88ad17.log
->service password-encryption
->!
->debug zebra kernel
->debug zebra rib
->!
->interface lo
->!
->interface qg-3718e4be-13
-> ipv6 nd suppress-ra
->!
->interface qr-ae903d7a-4e
-> ipv6 nd suppress-ra
->!
->ip route 133.162.131.9/32 Null0
->ip route 133.162.131.10/32 Null0
->ip route 133.162.131.101/32 Null0
->ip route 133.162.131.102/32 Null0
->ip route 133.162.131.103/32 Null0
->ip route 133.162.131.104/32 Null0
->!
->ip forwarding
->!
->!
->line vty
->!
->end
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh ip route
->Codes: K - kernel route, C - connected, S - static, R - RIP, O - OSPF,
->       I - ISIS, B - BGP, > - selected route, * - FIB route
->
->B>* 0.0.0.0/0 [200/100] via 133.162.130.1, qg-3718e4be-13, 04w3d22h
->K>* 100.96.0.0/16 via 172.16.3.96, qr-ae903d7a-4e
->K>* 100.97.0.0/16 via 172.16.3.253, qr-ae903d7a-4e
->K>* 100.98.0.0/16 via 172.16.3.98, qr-ae903d7a-4e
->K>* 100.99.0.0/16 via 172.16.3.253, qr-ae903d7a-4e
->C>* 127.0.0.0/8 is directly connected, lo
->C>* 133.162.130.0/24 is directly connected, qg-3718e4be-13
->S   133.162.131.9/32 [1/0] is directly connected, Null0, bh
->C>* 133.162.131.9/32 is directly connected, qg-3718e4be-13
->S   133.162.131.10/32 [1/0] is directly connected, Null0, bh
->C>* 133.162.131.10/32 is directly connected, qg-3718e4be-13
->S   133.162.131.101/32 [1/0] is directly connected, Null0, bh
->C>* 133.162.131.101/32 is directly connected, qg-3718e4be-13
->S   133.162.131.102/32 [1/0] is directly connected, Null0, bh
->C>* 133.162.131.102/32 is directly connected, qg-3718e4be-13
->S   133.162.131.103/32 [1/0] is directly connected, Null0, bh
->C>* 133.162.131.103/32 is directly connected, qg-3718e4be-13
->S   133.162.131.104/32 [1/0] is directly connected, Null0, bh
->C>* 133.162.131.104/32 is directly connected, qg-3718e4be-13
->C>* 172.16.2.0/23 is directly connected, qr-ae903d7a-4e
->K>* 172.16.11.0/24 via 172.16.3.11, qr-ae903d7a-4e
->K>* 172.16.12.0/24 via 172.16.3.12, qr-ae903d7a-4e
->K>* 172.16.13.0/24 via 172.16.3.13, qr-ae903d7a-4e
->K>* 172.16.14.0/24 via 172.16.3.14, qr-ae903d7a-4e
->K>* 172.16.15.0/24 via 172.16.3.15, qr-ae903d7a-4e
->K>* 172.16.16.0/24 via 172.16.3.16, qr-ae903d7a-4e
->K>* 172.16.17.0/24 via 172.16.3.17, qr-ae903d7a-4e
->K>* 172.16.18.0/24 via 172.16.3.18, qr-ae903d7a-4e
->K>* 172.16.19.0/24 via 172.16.3.19, qr-ae903d7a-4e
->K>* 172.16.20.0/24 via 172.16.3.20, qr-ae903d7a-4e
->K>* 172.16.21.0/24 via 172.16.3.21, qr-ae903d7a-4e
->K>* 172.16.22.0/24 via 172.16.3.22, qr-ae903d7a-4e
->K>* 172.16.23.0/24 via 172.16.3.23, qr-ae903d7a-4e
->K>* 172.16.24.0/24 via 172.16.3.24, qr-ae903d7a-4e
->K>* 172.16.25.0/24 via 172.16.3.25, qr-ae903d7a-4e
->K>* 172.16.26.0/24 via 172.16.3.26, qr-ae903d7a-4e
->K>* 172.16.27.0/24 via 172.16.3.27, qr-ae903d7a-4e
->K>* 172.16.28.0/24 via 172.16.3.28, qr-ae903d7a-4e
->K>* 172.16.29.0/24 via 172.16.3.29, qr-ae903d7a-4e
->K>* 172.16.30.0/24 via 172.16.3.30, qr-ae903d7a-4e
->K>* 172.16.31.0/24 via 172.16.3.31, qr-ae903d7a-4e
->K>* 172.16.32.0/24 via 172.16.3.32, qr-ae903d7a-4e
->K>* 172.16.33.0/24 via 172.16.3.33, qr-ae903d7a-4e
->K>* 172.16.34.0/24 via 172.16.3.14, qr-ae903d7a-4e
->K>* 172.17.0.0/16 via 172.16.3.253, qr-ae903d7a-4e
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh int
->jp0a01-pgy004-00# sh interface
->Interface lo is up, line protocol detection is disabled
->  index 81 metric 1 mtu 65536
->  flags: <UP,LOOPBACK,RUNNING>
->  inet 127.0.0.1/8
->  inet6 ::1/128
->Interface qg-3718e4be-13 is up, line protocol detection is disabled
->  index 82 metric 1 mtu 1500
->  flags: <UP,BROADCAST,RUNNING>
->  HWaddr: fa:16:3e:72:79:fa
->  inet 133.162.130.10/24 broadcast 133.162.130.255
->  inet 133.162.131.9/32 broadcast 133.162.131.9
->  inet 133.162.131.10/32 broadcast 133.162.131.10
->  inet 133.162.131.101/32 broadcast 133.162.131.101
->  inet 133.162.131.102/32 broadcast 133.162.131.102
->  inet 133.162.131.103/32 broadcast 133.162.131.103
->  inet 133.162.131.104/32 broadcast 133.162.131.104
->  inet6 fe80::f816:3eff:fe72:79fa/64
->Interface qr-ae903d7a-4e is up, line protocol detection is disabled
->  index 83 metric 1 mtu 1500
->  flags: <UP,BROADCAST,RUNNING>
->  HWaddr: fa:16:3e:d4:3a:b2
->  inet 172.16.3.254/23 broadcast 172.16.3.255
->  inet6 fe80::f816:3eff:fed4:3ab2/64
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# exit
->Connection closed by foreign host.
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# telnet localhost 2605
->Trying ::1...
->telnet: connect to address ::1: Connection refused
->Trying 127.0.0.1...
->Connected to localhost.
->Escape character is '^]'.
->
->Hello, this is Quagga (version 0.99.15).
->Copyright 1996-2005 Kunihiro Ishiguro, et al.
->
->
->User Access Verification
->
->Password:
->jp0a01-pgy004-00>
->jp0a01-pgy004-00>
->jp0a01-pgy004-00> en
->Password:
->Password:
->Password:
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh run
->
->Current configuration:
->!
->hostname jp0a01-pgy004-00
->password 8 CkJ8DGS6WvALY
->enable password 8 9ef.4CjzJgPqQ
->log file /var/log/l3_agent_bgp/bgpd_qrouter-457649c8-b5c8-4fe1-83f9-15c68d88ad17.log
->service password-encryption
->!
->debug bgp as4
->debug bgp keepalives
->debug bgp updates
->debug bgp zebra
->!
->bgp config-type cisco
->!
->router bgp 65417
-> no synchronization
-> bgp router-id 133.162.130.10
-> network 133.162.131.9 mask 255.255.255.255
-> network 133.162.131.10 mask 255.255.255.255
-> network 133.162.131.101 mask 255.255.255.255
-> network 133.162.131.102 mask 255.255.255.255
-> network 133.162.131.103 mask 255.255.255.255
-> network 133.162.131.104 mask 255.255.255.255
-> neighbor 133.162.130.1 remote-as 65417
-> neighbor 133.162.130.1 send-community both
-> neighbor 133.162.130.2 remote-as 65417
-> neighbor 133.162.130.2 send-community both
-> no auto-summary
->!
->line vty
->!
->end
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh ip bgp su
->jp0a01-pgy004-00# sh ip bgp summary
->BGP router identifier 133.162.130.10, local AS number 65417
->RIB entries 13, using 1248 bytes of memory
->Peers 2, using 9120 bytes of memory
->
->Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
->133.162.130.1   4 65417   50615   46000        0    0    0 04w3d22h        1
->133.162.130.2   4 65417   50624   46000        0    0    0 04w3d22h        1
->
->Total number of neighbors 2
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh ip bgp neighbors
->BGP neighbor is 133.162.130.1, remote AS 65417, local AS 65417, internal link
->  BGP version 4, remote router ID 10.0.6.24
->  BGP state = Established, up for 04w3d22h
->  Last read 00:00:22, hold time is 180, keepalive interval is 60 seconds
->  Neighbor capabilities:
->    4 Byte AS: advertised and received
->    Route refresh: advertised and received(old & new)
->    Address family IPv4 Unicast: advertised and received
->  Message statistics:
->    Inq depth is 0
->    Outq depth is 0
->                         Sent       Rcvd
->    Opens:                  1          0
->    Notifications:          0          0
->    Updates:                9          2
->    Keepalives:         45991      50614
->    Route Refresh:          0          0
->    Capability:             0          0
->    Total:              46001      50616
->  Minimum time between advertisement runs is 5 seconds
->
-> For address family: IPv4 Unicast
->  Community attribute sent to this neighbor(both)
->  1 accepted prefixes
->
->  Connections established 1; dropped 0
->  Last reset never
->Local host: 133.162.130.10, Local port: 179
->Foreign host: 133.162.130.1, Foreign port: 24827
->Nexthop: 133.162.130.10
->Nexthop global: fe80::f816:3eff:fe72:79fa
->Nexthop local: ::
->BGP connection: non shared network
->Read thread: on  Write thread: off
->
->BGP neighbor is 133.162.130.2, remote AS 65417, local AS 65417, internal link
->  BGP version 4, remote router ID 10.0.6.25
->  BGP state = Established, up for 04w3d22h
->  Last read 00:00:08, hold time is 180, keepalive interval is 60 seconds
->  Neighbor capabilities:
->    4 Byte AS: advertised and received
->    Route refresh: advertised and received(old & new)
->    Address family IPv4 Unicast: advertised and received
->  Message statistics:
->    Inq depth is 0
->    Outq depth is 0
->                         Sent       Rcvd
->    Opens:                  1          1
->    Notifications:          0          0
->    Updates:                9          2
->    Keepalives:         45991      50623
->    Route Refresh:          0          0
->    Capability:             0          0
->    Total:              46001      50626
->  Minimum time between advertisement runs is 5 seconds
->
-> For address family: IPv4 Unicast
->  Community attribute sent to this neighbor(both)
->  1 accepted prefixes
->
->  Connections established 1; dropped 0
->  Last reset never
->Local host: 133.162.130.10, Local port: 44943
->Foreign host: 133.162.130.2, Foreign port: 179
->Nexthop: 133.162.130.10
->Nexthop global: fe80::f816:3eff:fe72:79fa
->Nexthop local: ::
->BGP connection: non shared network
->Read thread: on  Write thread: off
->
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh ip bgp neighbors 133.162.130.1 advertised-routes
->BGP table version is 0, local router ID is 133.162.130.10
->Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
->              r RIB-failure, S Stale, R Removed
->Origin codes: i - IGP, e - EGP, ? - incomplete
->
->   Network          Next Hop            Metric LocPrf Weight Path
->*> 133.162.131.9/32 133.162.130.10           0    100  32768 i
->*> 133.162.131.10/32
->                    133.162.130.10           0    100  32768 i
->*> 133.162.131.101/32
->                    133.162.130.10           0    100  32768 i
->*> 133.162.131.102/32
->                    133.162.130.10           0    100  32768 i
->*> 133.162.131.103/32
->                    133.162.130.10           0    100  32768 i
->*> 133.162.131.104/32
->                    133.162.130.10           0    100  32768 i
->
->Total number of prefixes 6
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh ip bgp neighbors 133.162.130.1 rou
->jp0a01-pgy004-00# sh ip bgp neighbors 133.162.130.1 routes
->BGP table version is 0, local router ID is 133.162.130.10
->Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
->              r RIB-failure, S Stale, R Removed
->Origin codes: i - IGP, e - EGP, ? - incomplete
->
->   Network          Next Hop            Metric LocPrf Weight Path
->*>i0.0.0.0          133.162.130.1          100    100      0 ?
->
->Total number of prefixes 1
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh ip bgp neighbors 133.162.130.2 advertised-routes
->BGP table version is 0, local router ID is 133.162.130.10
->Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
->              r RIB-failure, S Stale, R Removed
->Origin codes: i - IGP, e - EGP, ? - incomplete
->
->   Network          Next Hop            Metric LocPrf Weight Path
->*> 133.162.131.9/32 133.162.130.10           0    100  32768 i
->*> 133.162.131.10/32
->                    133.162.130.10           0    100  32768 i
->*> 133.162.131.101/32
->                    133.162.130.10           0    100  32768 i
->*> 133.162.131.102/32
->                    133.162.130.10           0    100  32768 i
->*> 133.162.131.103/32
->                    133.162.130.10           0    100  32768 i
->*> 133.162.131.104/32
->                    133.162.130.10           0    100  32768 i
->
->Total number of prefixes 6
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# sh ip bgp neighbors 133.162.130.2 routes
->BGP table version is 0, local router ID is 133.162.130.10
->Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
->              r RIB-failure, S Stale, R Removed
->Origin codes: i - IGP, e - EGP, ? - incomplete
->
->   Network          Next Hop            Metric LocPrf Weight Path
->* i0.0.0.0          133.162.130.2          105    100      0 ?
->
->Total number of prefixes 1
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00#
->jp0a01-pgy004-00# exit
->Connection closed by foreign host.
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# exit
->exit
->[root@jp0a01-pgy004-00 ~]#
+[root@zone-inst1 ~]# neutron l3-agent-list-hosting-router 457649c8-b5c8-4fe1-83f9-15c68d88ad17
++--------------------------------------+------------------+----------------+-------+
+| id                                   | host             | admin_state_up | alive |
++--------------------------------------+------------------+----------------+-------+
+| be0850ca-ea04-46d4-9338-ba9f621e9ddd | pgy004-00 | True           | :-)   |
++--------------------------------------+------------------+----------------+-------+
+[root@zone-inst1 ~]#
+[root@zone-inst1 ~]# ssh pgy004-00
+root@pgy004-00's password:
+Last login: Mon May 25 02:38:31 2015 from zone-inst1
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# ip netns | grep 457649c8-b5c8-4fe1-83f9-15c68d88ad17
+qrouter-457649c8-b5c8-4fe1-83f9-15c68d88ad17
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# ip netns exec qrouter-457649c8-b5c8-4fe1-83f9-15c68d88ad17 bash
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# ifconfig
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:2693 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2693 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:221929 (216.7 KiB)  TX bytes:221929 (216.7 KiB)
 
->[root@jp0a01-pgy004-00 ~]# ovs-vsctl show | grep qg-3718e4be-13 -A 1
->        Port "qg-3718e4be-13"
->            tag: 50
->            Interface "qg-3718e4be-13"
->                type: internal
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# ovs-vsctl show | grep qg-3718e4be-13 -A 1
->        Port "qg-3718e4be-13"
->            tag: 50
->            Interface "qg-3718e4be-13"
->                type: internal
->[root@jp0a01-pgy004-00 ~]# ^C
->[root@jp0a01-pgy004-00 ~]# ovs-vsctl show | grep qr-ae903d7a-4e -A 1
->        Port "qr-ae903d7a-4e"
->            tag: 10
->            Interface "qr-ae903d7a-4e"
->                type: internal
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# ovs-ofctl dump-flows br-int | grep vid:50,
-> cookie=0x0, duration=2760816.989s, table=0, n_packets=37947152, n_bytes=76176006013, idle_age=0, hard_age=65534, priority=3,in_port=121,dl_vlan=11 actions=mod_vlan_vid:50,NORMAL
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]# ovs-ofctl dump-flows br-int | grep vid:10,
-> cookie=0x0, duration=2760851.551s, table=0, n_packets=23706813, n_bytes=2432806836, idle_age=0, hard_age=65534, priority=3,in_port=121,dl_vlan=1036 actions=mod_vlan_vid:10,NORMAL
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
->[root@jp0a01-pgy004-00 ~]#
+qg-3718e4be-13 Link encap:Ethernet  HWaddr FA:16:3E:72:79:FA
+          inet addr:133.162.130.10  Bcast:133.162.130.255  Mask:255.255.255.0
+          inet6 addr: fe80::f816:3eff:fe72:79fa/64 Scope:Link
+          UP BROADCAST RUNNING  MTU:1500  Metric:1
+          RX packets:104178578 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:68945003 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:242835805415 (226.1 GiB)  TX bytes:4963094236 (4.6 GiB)
+
+qr-ae903d7a-4e Link encap:Ethernet  HWaddr FA:16:3E:D4:3A:B2
+          inet addr:172.16.3.254  Bcast:172.16.3.255  Mask:255.255.254.0
+          inet6 addr: fe80::f816:3eff:fed4:3ab2/64 Scope:Link
+          UP BROADCAST RUNNING  MTU:1500  Metric:1
+          RX packets:70371417 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:96592643 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:5624008379 (5.2 GiB)  TX bytes:242945613370 (226.2 GiB)
+
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# ip route show
+blackhole 133.162.131.101  proto static
+blackhole 133.162.131.102  proto static
+blackhole 133.162.131.103  proto static
+blackhole 133.162.131.104  proto static
+blackhole 133.162.131.10  proto static
+blackhole 133.162.131.9  proto static
+172.16.22.0/24 via 172.16.3.22 dev qr-ae903d7a-4e
+172.16.23.0/24 via 172.16.3.23 dev qr-ae903d7a-4e
+172.16.11.0/24 via 172.16.3.11 dev qr-ae903d7a-4e
+172.16.27.0/24 via 172.16.3.27 dev qr-ae903d7a-4e
+133.162.130.0/24 dev qg-3718e4be-13  proto kernel  scope link  src 133.162.130.10
+172.16.24.0/24 via 172.16.3.24 dev qr-ae903d7a-4e
+172.16.25.0/24 via 172.16.3.25 dev qr-ae903d7a-4e
+172.16.2.0/23 dev qr-ae903d7a-4e  proto kernel  scope link  src 172.16.3.254
+100.98.0.0/16 via 172.16.3.98 dev qr-ae903d7a-4e
+100.99.0.0/16 via 172.16.3.253 dev qr-ae903d7a-4e
+100.96.0.0/16 via 172.16.3.96 dev qr-ae903d7a-4e
+100.97.0.0/16 via 172.16.3.253 dev qr-ae903d7a-4e
+172.17.0.0/16 via 172.16.3.253 dev qr-ae903d7a-4e
+default via 133.162.130.1 dev qg-3718e4be-13  proto zebra  metric 100
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# telnet localhost 2601
+Trying ::1...
+telnet: connect to address ::1: Connection refused
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+
+Hello, this is Quagga (version 0.99.15).
+Copyright 1996-2005 Kunihiro Ishiguro, et al.
+
+
+User Access Verification
+
+Password:
+pgy004-00> en
+Password:
+pgy004-00#
+pgy004-00#
+pgy004-00# sh run
+
+Current configuration:
+!
+hostname pgy004-00
+password 8 PaPjMWpxq9MUk
+enable password 8 J0C.WDR1amIt6
+log file /var/log/l3_agent_bgp/zebra_qrouter-457649c8-b5c8-4fe1-83f9-15c68d88ad17.log
+service password-encryption
+!
+debug zebra kernel
+debug zebra rib
+!
+interface lo
+!
+interface qg-3718e4be-13
+ ipv6 nd suppress-ra
+!
+interface qr-ae903d7a-4e
+ ipv6 nd suppress-ra
+!
+ip route 133.162.131.9/32 Null0
+ip route 133.162.131.10/32 Null0
+!
+ip forwarding
+!
+!
+line vty
+!
+end
+pgy004-00#
+pgy004-00#
+pgy004-00# sh ip route
+Codes: K - kernel route, C - connected, S - static, R - RIP, O - OSPF,
+       I - ISIS, B - BGP, > - selected route, * - FIB route
+
+B>* 0.0.0.0/0 [200/100] via 133.162.130.1, qg-3718e4be-13, 04w3d22h
+K>* 100.96.0.0/16 via 172.16.3.96, qr-ae903d7a-4e
+K>* 100.97.0.0/16 via 172.16.3.253, qr-ae903d7a-4e
+K>* 100.98.0.0/16 via 172.16.3.98, qr-ae903d7a-4e
+K>* 100.99.0.0/16 via 172.16.3.253, qr-ae903d7a-4e
+C>* 127.0.0.0/8 is directly connected, lo
+C>* 133.162.130.0/24 is directly connected, qg-3718e4be-13
+S   133.162.131.9/32 [1/0] is directly connected, Null0, bh
+C>* 133.162.131.9/32 is directly connected, qg-3718e4be-13
+S   133.162.131.10/32 [1/0] is directly connected, Null0, bh
+C>* 133.162.131.10/32 is directly connected, qg-3718e4be-13
+S   133.162.131.101/32 [1/0] is directly connected, Null0, bh
+C>* 133.162.131.101/32 is directly connected, qg-3718e4be-13
+S   133.162.131.102/32 [1/0] is directly connected, Null0, bh
+C>* 133.162.131.102/32 is directly connected, qg-3718e4be-13
+S   133.162.131.103/32 [1/0] is directly connected, Null0, bh
+C>* 133.162.131.103/32 is directly connected, qg-3718e4be-13
+S   133.162.131.104/32 [1/0] is directly connected, Null0, bh
+C>* 133.162.131.104/32 is directly connected, qg-3718e4be-13
+C>* 172.16.2.0/23 is directly connected, qr-ae903d7a-4e
+K>* 172.16.11.0/24 via 172.16.3.11, qr-ae903d7a-4e
+K>* 172.16.12.0/24 via 172.16.3.12, qr-ae903d7a-4e
+K>* 172.16.13.0/24 via 172.16.3.13, qr-ae903d7a-4e
+K>* 172.16.14.0/24 via 172.16.3.14, qr-ae903d7a-4e
+K>* 172.16.15.0/24 via 172.16.3.15, qr-ae903d7a-4e
+pgy004-00#
+pgy004-00#
+pgy004-00#
+pgy004-00# sh int
+pgy004-00# sh interface
+Interface lo is up, line protocol detection is disabled
+  index 81 metric 1 mtu 65536
+  flags: <UP,LOOPBACK,RUNNING>
+  inet 127.0.0.1/8
+  inet6 ::1/128
+Interface qg-3718e4be-13 is up, line protocol detection is disabled
+  index 82 metric 1 mtu 1500
+  flags: <UP,BROADCAST,RUNNING>
+  HWaddr: fa:16:3e:72:79:fa
+  inet 133.162.130.10/24 broadcast 133.162.130.255
+  inet 133.162.131.9/32 broadcast 133.162.131.9
+  inet 133.162.131.10/32 broadcast 133.162.131.10
+  inet 133.162.131.101/32 broadcast 133.162.131.101
+  inet 133.162.131.102/32 broadcast 133.162.131.102
+  inet 133.162.131.103/32 broadcast 133.162.131.103
+  inet 133.162.131.104/32 broadcast 133.162.131.104
+  inet6 fe80::f816:3eff:fe72:79fa/64
+Interface qr-ae903d7a-4e is up, line protocol detection is disabled
+  index 83 metric 1 mtu 1500
+  flags: <UP,BROADCAST,RUNNING>
+  HWaddr: fa:16:3e:d4:3a:b2
+  inet 172.16.3.254/23 broadcast 172.16.3.255
+  inet6 fe80::f816:3eff:fed4:3ab2/64
+pgy004-00#
+pgy004-00#
+pgy004-00#
+pgy004-00# exit
+Connection closed by foreign host.
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# telnet localhost 2605
+Trying ::1...
+telnet: connect to address ::1: Connection refused
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+
+Hello, this is Quagga (version 0.99.15).
+
+
+User Access Verification
+
+Password:
+pgy004-00>
+pgy004-00>
+pgy004-00> en
+Password:
+Password:
+Password:
+pgy004-00#
+pgy004-00#
+pgy004-00#
+pgy004-00# sh run
+
+Current configuration:
+!
+hostname **
+password 8 **
+enable password 8 **
+log file /var/log/l3_agent_bgp/bgpd_qrouter-<ID>.log
+service password-encryption
+!
+debug bgp as4
+debug bgp keepalives
+debug bgp updates
+debug bgp zebra
+!
+bgp config-type cisco
+!
+router bgp 65417
+ no synchronization
+ bgp router-id 133.162.130.10
+ network 133.162.131.9 mask 255.255.255.255
+ network 133.162.131.10 mask 255.255.255.255
+ network 133.162.131.101 mask 255.255.255.255
+ network 133.162.131.102 mask 255.255.255.255
+ network 133.162.131.103 mask 255.255.255.255
+ network 133.162.131.104 mask 255.255.255.255
+ neighbor 133.162.130.1 remote-as 65417
+ neighbor 133.162.130.1 send-community both
+ neighbor 133.162.130.2 remote-as 65417
+ neighbor 133.162.130.2 send-community both
+ no auto-summary
+!
+line vty
+!
+end
+pgy004-00#
+pgy004-00#
+pgy004-00# sh ip bgp su
+pgy004-00# sh ip bgp summary
+BGP router identifier 133.162.130.10, local AS number 65417
+RIB entries 13, using 1248 bytes of memory
+Peers 2, using 9120 bytes of memory
+
+Neighbor        V    AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+133.162.130.1   4 65417   50615   46000        0    0    0 04w3d22h        1
+133.162.130.2   4 65417   50624   46000        0    0    0 04w3d22h        1
+
+Total number of neighbors 2
+pgy004-00#
+pgy004-00#
+pgy004-00# sh ip bgp neighbors
+BGP neighbor is 133.162.130.1, remote AS 65417, local AS 65417, internal link
+  BGP version 4, remote router ID 10.0.6.24
+  BGP state = Established, up for 04w3d22h
+  Last read 00:00:22, hold time is 180, keepalive interval is 60 seconds
+  Neighbor capabilities:
+    4 Byte AS: advertised and received
+    Route refresh: advertised and received(old & new)
+    Address family IPv4 Unicast: advertised and received
+  Message statistics:
+    Inq depth is 0
+    Outq depth is 0
+                         Sent       Rcvd
+    Opens:                  1          0
+    Notifications:          0          0
+    Updates:                9          2
+    Keepalives:         45991      50614
+    Route Refresh:          0          0
+    Capability:             0          0
+    Total:              46001      50616
+  Minimum time between advertisement runs is 5 seconds
+
+ For address family: IPv4 Unicast
+  Community attribute sent to this neighbor(both)
+  1 accepted prefixes
+
+  Connections established 1; dropped 0
+  Last reset never
+Local host: 133.162.130.10, Local port: 179
+Foreign host: 133.162.130.1, Foreign port: 24827
+Nexthop: 133.162.130.10
+Nexthop global: fe80::f816:3eff:fe72:79fa
+Nexthop local: ::
+BGP connection: non shared network
+Read thread: on  Write thread: off
+
+BGP neighbor is 133.162.130.2, remote AS 65417, local AS 65417, internal link
+  BGP version 4, remote router ID 10.0.6.25
+  BGP state = Established, up for 04w3d22h
+  Last read 00:00:08, hold time is 180, keepalive interval is 60 seconds
+  Neighbor capabilities:
+    4 Byte AS: advertised and received
+    Route refresh: advertised and received(old & new)
+    Address family IPv4 Unicast: advertised and received
+  Message statistics:
+    Inq depth is 0
+    Outq depth is 0
+                         Sent       Rcvd
+    Opens:                  1          1
+    Notifications:          0          0
+    Updates:                9          2
+    Keepalives:         45991      50623
+    Route Refresh:          0          0
+    Capability:             0          0
+    Total:              46001      50626
+  Minimum time between advertisement runs is 5 seconds
+
+ For address family: IPv4 Unicast
+  Community attribute sent to this neighbor(both)
+  1 accepted prefixes
+
+  Connections established 1; dropped 0
+  Last reset never
+Local host: 133.162.130.10, Local port: 44943
+Foreign host: 133.162.130.2, Foreign port: 179
+Nexthop: 133.162.130.10
+Nexthop global: fe80::f816:3eff:fe72:79fa
+Nexthop local: ::
+BGP connection: non shared network
+Read thread: on  Write thread: off
+
+pgy004-00#
+pgy004-00# sh ip bgp neighbors 133.162.130.1 advertised-routes
+BGP table version is 0, local router ID is 133.162.130.10
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, R Removed
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 133.162.131.9/32 133.162.130.10           0    100  32768 i
+*> 133.162.131.10/32
+                    133.162.130.10           0    100  32768 i
+*> 133.162.131.101/32
+                    133.162.130.10           0    100  32768 i
+*> 133.162.131.102/32
+                    133.162.130.10           0    100  32768 i
+*> 133.162.131.103/32
+                    133.162.130.10           0    100  32768 i
+*> 133.162.131.104/32
+                    133.162.130.10           0    100  32768 i
+
+Total number of prefixes 6
+pgy004-00#
+pgy004-00#
+pgy004-00# sh ip bgp neighbors 133.162.130.1 rou
+pgy004-00# sh ip bgp neighbors 133.162.130.1 routes
+BGP table version is 0, local router ID is 133.162.130.10
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, R Removed
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*>i0.0.0.0          133.162.130.1          100    100      0 ?
+
+Total number of prefixes 1
+pgy004-00#
+pgy004-00#
+pgy004-00#
+pgy004-00# sh ip bgp neighbors 133.162.130.2 advertised-routes
+BGP table version is 0, local router ID is 133.162.130.10
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, R Removed
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+*> 133.162.131.9/32 133.162.130.10           0    100  32768 i
+*> 133.162.131.10/32
+                    133.162.130.10           0    100  32768 i
+*> 133.162.131.101/32
+                    133.162.130.10           0    100  32768 i
+*> 133.162.131.102/32
+                    133.162.130.10           0    100  32768 i
+*> 133.162.131.103/32
+                    133.162.130.10           0    100  32768 i
+*> 133.162.131.104/32
+                    133.162.130.10           0    100  32768 i
+
+Total number of prefixes 6
+pgy004-00#
+pgy004-00#
+pgy004-00#
+pgy004-00# sh ip bgp neighbors 133.162.130.2 routes
+BGP table version is 0, local router ID is 133.162.130.10
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal,
+              r RIB-failure, S Stale, R Removed
+Origin codes: i - IGP, e - EGP, ? - incomplete
+
+   Network          Next Hop            Metric LocPrf Weight Path
+* i0.0.0.0          133.162.130.2          105    100      0 ?
+
+Total number of prefixes 1
+pgy004-00#
+pgy004-00#
+pgy004-00#
+pgy004-00#
+pgy004-00# exit
+Connection closed by foreign host.
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# exit
+exit
+[root@pgy004-00 ~]#
+
+[root@pgy004-00 ~]# ovs-vsctl show | grep qg-3718e4be-13 -A 1
+        Port "qg-3718e4be-13"
+            tag: 50
+            Interface "qg-3718e4be-13"
+                type: internal
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# ovs-vsctl show | grep qg-3718e4be-13 -A 1
+        Port "qg-3718e4be-13"
+            tag: 50
+            Interface "qg-3718e4be-13"
+                type: internal
+[root@pgy004-00 ~]# ^C
+[root@pgy004-00 ~]# ovs-vsctl show | grep qr-ae903d7a-4e -A 1
+        Port "qr-ae903d7a-4e"
+            tag: 10
+            Interface "qr-ae903d7a-4e"
+                type: internal
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# ovs-ofctl dump-flows br-int | grep vid:50,
+ cookie=0x0, duration=2760816.989s, table=0, n_packets=37947152, n_bytes=76176006013, idle_age=0, hard_age=65534, priority=3,in_port=121,dl_vlan=11 actions=mod_vlan_vid:50,NORMAL
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]# ovs-ofctl dump-flows br-int | grep vid:10,
+ cookie=0x0, duration=2760851.551s, table=0, n_packets=23706813, n_bytes=2432806836, idle_age=0, hard_age=65534, priority=3,in_port=121,dl_vlan=1036 actions=mod_vlan_vid:10,NORMAL
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
+[root@pgy004-00 ~]#
 
 
 
 [[[Extract]]]
 
-Router-IDF457649c8-b5c8-4fe1-83f9-15c68d88ad17
 
-Interface1F
-   PORT-ID = 3718e4be-1395-4e7a-a256-25d842af2bff
-   NAME    = qg-3718e4be-13
-   VID     = 11
-   IPaddr  = 133.162.130.10/24
-   MACaddr = FA:16:3E:72:79:FA
-
-Interface2F
-   PORT-ID = ae903d7a-4e5e-4dd2-931b-4efc22ca6c85
-   NAME    = qr-ae903d7a-4e
-   VID     = 1036
-   IPaddr  = 172.16.3.254/23
-   MACaddr = FA:16:3E:72:79:FA
-
-FWaaSF
-   FW-ID = a9f035f0-7a84-4091-bbd7-e24d5fa1b364
-   RULES = –––È—ª–––
-   ”<position> <ip_ver> <protocol> <src-addr> <src-port> <dst-addr> <dst-port> <action>
-   ”ã‹L‚Ì‡‚Å‘S‚Ä‹LÚ‚µ‚Ä‚¨‚­
-
-RoutingF
-   –––È—ª–––
-   ”"ip route show"‚ÌŒ‹‰Ê
-
-(ˆÈ~‚ÍAInet or IntrVR‚Ì‚İ)
-ZEBTAF
-   –––È—ª–––
-   ”zebra‚ÅÀs‚µ‚½“à—e‘S‚Ä
-
-BGPDF
-   –––È—ª–––
-   ”bgpd‚ÅÀs‚µ‚½“à—e‘S‚Ä
-
-
-¡Ql‘—¿
-¡network‚Ìstack‚ªÁ‚¦‚È‚¢‚Æ‚«‚ÍƒGƒ‰[‚Æ‚È‚éƒ|[ƒg‚ğˆÈ‰º‚Åupdate
-neutron --insecure port-update yport-idz --device_owner ""
+â– å‚è€ƒè³‡æ–™
+â– networkçš„stackæ¶ˆå¤±æ˜¯çš„å¯¹ç­–
+neutron --insecure port-update ã€port-idã€‘ --device_owner ""
 neutron --insecure port-update 7877a7d2-7b37-4214-8220-a34c711cb671 --device_owner ""
 
-¡router‚Ìroutes‚ğÁ‚·ê‡
-neutron router-update yrouter-idz  --routes action=clear
+â– è·¯ç”±ä¿¡æ¯æ¶ˆå¤±æ˜¯çš„å¯¹ç­–
+neutron router-update ã€router-idã€‘  --routes action=clear
 neutron router-update 77f6feed-52e9-49f5-bacd-b14bd5af9b72 --routes action=clear
 
 
-¡heat‚Åoutput‚ğŠm”F‚·‚é•û–@
-[root@ror-heat2 noelb]# heat output-list e5975717-f9a3-4b0f-80a8-c98c9a217154
+â– ç”¨heatç¡®è®¤è¾“å‡ºçš„æ–¹æ³•
+[root@heat2 noelb]# heat output-list e5975717-f9a3-4b0f-80a8-c98c9a217154
 +------------------------------+----------------------+
 | output_key                   | description          |
 +------------------------------+----------------------+
 | service_network_connector_id | Network connector ID |
 +------------------------------+----------------------+
-[root@ror-heat2 noelb]#  heat output-show e5975717-f9a3-4b0f-80a8-c98c9a217154 service_network_connector_id
+[root@heat2 noelb]#  heat output-show e5975717-f9a3-4b0f-80a8-c98c9a217154 service_network_connector_id
 "71cacf5f-418c-44a2-b626-9244437c8b4d"
 
 
-¡ƒ‹[ƒeƒBƒ“ƒOƒtƒ‹ƒZƒbƒg
-neutron router-update yƒ‹[ƒ^–¼z --routes type=dict list=true \
+â– è·¯ç”±è¡¨è®¾å®š
+neutron router-update ã€routeråã€‘ --routes type=dict list=true \
 destination=10.3.0.0/24,nexthop=172.17.1.254 \
 destination=10.7.0.0/24,nexthop=172.17.1.254 \
 destination=100.97.0.0/24,nexthop=172.17.1.97 \
 destination=100.99.0.0/24,nexthop=172.17.1.99 \
-destination=172.16.22.0/24,nexthop=172.17.22.253 \ ©AZŠÔ—p
-destination=172.17.11.0/24,nexthop=172.17.1.11 \  ©‚±‚±‚©‚ç‰º‚Ì©•ª‚ÌƒZƒOƒƒ“ƒg‚ğíœ
+destination=172.16.22.0/24,nexthop=172.17.22.253 \ 
+destination=172.17.11.0/24,nexthop=172.17.1.11 \ 
 destination=172.17.12.0/24,nexthop=172.17.1.12 \
 destination=172.17.13.0/24,nexthop=172.17.1.13 \
 destination=172.17.14.0/24,nexthop=172.17.1.14 \
 destination=172.17.15.0/24,nexthop=172.17.1.15 \
 destination=172.17.16.0/24,nexthop=172.17.1.16 \
-destination=172.17.17.0/24,nexthop=172.17.1.17 \
-destination=172.17.18.0/24,nexthop=172.17.1.18 \
-destination=172.17.19.0/24,nexthop=172.17.1.19 \
-destination=172.17.20.0/24,nexthop=172.17.1.20 \
-destination=172.17.21.0/24,nexthop=172.17.1.21 \
-destination=172.17.22.0/24,nexthop=172.17.1.22 \
-destination=172.17.23.0/24,nexthop=172.17.1.23 \
-destination=172.17.24.0/24,nexthop=172.17.1.24 \
-destination=172.17.25.0/24,nexthop=172.17.1.25 \
-destination=172.17.26.0/24,nexthop=172.17.1.26 \
-destination=172.17.27.0/24,nexthop=172.17.1.27 \
-destination=172.17.28.0/24,nexthop=172.17.1.28 \
-destination=172.17.29.0/24,nexthop=172.17.1.29 \
-destination=172.17.30.0/24,nexthop=172.17.1.30 \
-destination=172.17.31.0/24,nexthop=172.17.1.31 \
 destination=172.17.4.0/23,nexthop=172.17.1.4 \
 destination=172.17.7.0/24,nexthop=172.17.1.4
 
 
 
-¡ƒg[ƒNƒ“æ“¾
+â– tokenå–å¾—
 export PATH=/opt/FJSVrorcpf/sys:$PATH
 
- oss
+â–¡oss
 TOKEN=`curl -s -X POST http://10.7.0.201:5000/v2.0/tokens \
 -d '{"auth": {"passwordCredentials": {"username":"oss", "password":"xjfi5Iv5p[kzFzhq"}, "tenantName":"oss"}}' \
 -H "Content-type: application/json" |  jq -r .access.token.id`
 
- admin
+â–¡admin
 TOKEN=`curl -s -X POST http://10.7.0.201:5000/v2.0/tokens \
 -d '{"auth": {"passwordCredentials": {"username":"admin", "password":"nes2n:cl4nsBJarh"}, "tenantName":"admin"}}' \
 -H "Content-type: application/json" |  jq -r .access.token.id`
 
- loadbalancing(elb)
+â–¡loadbalancing(elb)
 TOKEN=`curl -s -X POST http://10.7.0.201:5000/v2.0/tokens \
 -d '{"auth": {"passwordCredentials": {"username":"loadbalancing", "password":"8vurrslbZ-a9bqoA"}, "tenantName":"service"}}' \
 -H "Content-type: application/json" |  jq -r .access.token.id`
 
- dbaas
+â–¡dbaas
 TOKEN=`curl -s -X POST http://10.7.0.201:5000/v2.0/tokens \
 -d '{"auth": {"passwordCredentials": {"username":"database", "password":"ftZvf[tttq8Cavi8"}, "tenantName":"database"}}' \
 -H "Content-type: application/json" |  jq -r .access.token.id`
-
-
-
-
-
-
-
-
-
 
