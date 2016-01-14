@@ -1,8 +1,8 @@
 for fn in `seq 3 64`
 do 
 	IP="10.21.4.${fn}"
-	ipmitool -H ${IP} -U admin -P 'sr!06011' lan set 2 snmp T1soP9Ro 
-	ipmitool -H ${IP} -U admin -P 'sr!06011' lan alert set 2 1 ipaddr 10.20.7.1
-	ipmitool -H ${IP} -U admin -P 'sr!06011' lan alert set 2 2 ipaddr 10.20.7.6
-	curl --digest -u 'admin:sr!06011' -F APPLY=1 -F A="Apply All"  "http://${IP}/32\#trap" > /dev/null 
+	ipmitool -H ${IP} -U admin -P 'admin' lan set 2 snmp T1soP9Ro 
+	ipmitool -H ${IP} -U admin -P 'admin' lan alert set 2 1 ipaddr 10.20.7.1
+	ipmitool -H ${IP} -U admin -P 'admin' lan alert set 2 2 ipaddr 10.20.7.6
+	curl --digest -u 'admin:admin' -F APPLY=1 -F A="Apply All"  "http://${IP}/32\#trap" > /dev/null 
 done
