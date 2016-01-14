@@ -1,0 +1,59 @@
+SPEC 例子
+
+%define _binaries_in_noarch_packages_terminate_build   0  
+
+Name: flume
+Version: 2016.1.14
+Release: 1 
+Summary: fuleme test
+
+License: GPLv2
+Source0: %{name}-%{version}.tar.gz
+
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch: noarch
+
+%description
+Suning flume
+
+%prep
+%setup -c
+
+cd %{name}-%{version}
+
+%build
+
+%install
+rm -rf %{buildroot}
+cd $RPM_BUILD_DIR/%{name}-%{version}/%{name}-%{version}
+
+# Add some directories
+install -d -m 0755 %{buildroot}/opt/flume/bin
+install -d -m 0755 %{buildroot}/opt/flume/conf
+install -d -m 0755 %{buildroot}/opt/flume/filechannel
+install -d -m 0755 %{buildroot}/opt/flume/java
+install -d -m 0755 %{buildroot}/opt/flume/lib
+install -d -m 0755 %{buildroot}/opt/flume/logs
+install -d -m 0755 %{buildroot}/opt/flume/plugins.d
+install -d -m 0755 %{buildroot}/opt/flume/tools
+
+# Add the config files
+install -p -m 0755 bin/* %{buildroot}/opt/flume/bin/
+install -p -m 0755 conf/* %{buildroot}/opt/flume/conf/
+cp -r java/* %{buildroot}/opt/flume/java/
+install -p -m 0755 lib/* %{buildroot}/opt/flume/lib/
+cp -r plugins.d/* %{buildroot}/opt/flume/plugins.d/
+cp README %{buildroot}/opt/flume/
+install -p -m 0755 tools/* %{buildroot}/opt/flume/tools
+chmod -R 755 %{buildroot}/opt/flume/
+
+%clean
+rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root,-)
+/opt/flume/
+
+%changelog
+* Wed Jan 01 2016 honglei - 2016.1.14-1
+- Initial packages
