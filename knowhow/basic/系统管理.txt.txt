@@ -1,0 +1,7 @@
+1.查看服务序列号
+一般：dmidecode -s system-serial-number
+
+华为刀片： midecode -s baseboard-serial-number
+
+不支持-s参数的化
+dmidecode | grep -A5 'System Information' | grep 'Serial Number'
