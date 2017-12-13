@@ -1,0 +1,12 @@
+使用方法：
+./blkdeviotune.sh <-D domain> [-d device] [-r <number>] [-w <number>] [-R <number>] [-W <number>]
+
+例子:
+1. 设定指定设备的IO参数.
+  - ./blkdeviotune.sh -D e3d28339-8ea9-4d12-869b-02fb542cd74d -d vdb -W 1024000
+2. 删除指定设备的IO参数.
+  - ./blkdeviotune.sh -D e3d28339-8ea9-4d12-869b-02fb542cd74d -d vdb
+3. 设定某个虚拟机的所有本地数据盘的IO参数.
+  - ./blkdeviotune.sh -D e3d28339-8ea9-4d12-869b-02fb542cd74d -W 1024000
+4. 删除某个虚拟机的所有本地数据盘的IO参数.
+  - ./blkdeviotune.sh -D e3d28339-8ea9-4d12-869b-02fb542cd74d
