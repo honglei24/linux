@@ -37,7 +37,7 @@ def main():
                  len(invalid_dirs), len(all_dirs))
     for invalid_dir in invalid_dirs:
         logging.info("Purging directory: %s", invalid_dir)
-        # rmtree(invalid_dir)
+        rmtree(invalid_dir)
 
     logging.info("All done.")
 
