@@ -2,7 +2,7 @@ iscsiadm -m node -p 192.168.XX.XX:3260,1 --logout
 iscsiadm -m node -o delete -T iqn.1986-03.com.sun:02:46de72a8-5705-ec14-c178-9fe760cbf562 -p 192.168.56.1:3260,1
 
 
-echo "InitiatorName=iqn.2000-09.com.fujitsu:sop.sdc01:`hostname`" > /etc/iscsi/initiatorname.iscsi
+echo "InitiatorName=iqn.2000-09.com.XXX:sss.sdc01:`hostname`" > /etc/iscsi/initiatorname.iscsi
 iscsiadm -m node -U all
 for name in `iscsiadm -m node | awk '{print $2}' | sort -u`
 do
