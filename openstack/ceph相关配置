@@ -1,0 +1,84 @@
+# 计算节点配置:
+1.安装rpm包
+# yum install ceph ceph-common -y
+
+2.新增配置，配置内容找ceph配置人员。
+# echo -e '[global]
+auth_service_required = cephx
+filestore_xattr_use_omap = true
+auth_client_required = cephx
+auth_cluster_required = cephx
+mon_host = 10.0.0.1,10.0.0.2,10.0.0.3
+mon_initial_members = ceph1, ceph2, ceph3
+fsid = f077cc6d-cb99-4d28-9b1e-5f0591f5451a' > /etc/ceph/ceph.conf
+
+# echo -e '[client.admin]
+        key = AQDt5xlbsoDEChAAKTzeBeBaqYhU/uPbh5YQyQ==' > /etc/ceph/ceph.client.admin.keyring
+
+3.创建secret
+# cat > /var/tmp/secret.xml <<EOF
+<secret ephemeral='no' private='no'>
+   <uuid>ee2f146c-4a52-49ed-b12b-96dd01353150</uuid>
+   <usage type='ceph'>
+      <name>client.admin secret</name>
+   </usage>
+</secret>
+EOF
+
+# virsh secret-define --file /var/tmp/secret.xml
+# virsh secret-set-value --secret ee2f146c-4a52-49ed-b12b-96dd01353150 --base64 AQDt5xlbsoDEChAAKTzeBeBaqYhU/uPbh5YQyQ==
+
+# rm -f /var/tmp/secret.xml
+		
+4.修改nova配置
+# vi /etc/nova/nova.conf
+[libvirt] 段下面追加下面内容
+images_type = rbd
+images_rbd_pool = nova
+images_rbd_ceph_conf = /etc/ceph/ceph.conf
+rbd_user = admin
+rbd_secret_uuid = ee2f146c-4a52-49ed-b12b-96dd01353150
+
+或者
+#sed -i '/^\[libvirt]/ a\images_type=rbd\nimages_rbd_pool=nova\nimages_rbd_ceph_conf=/etc/ceph/ceph.conf\nrbd_user=admin\nrbd_secret_uuid=ee2f146c-4a52-49ed-b12b-96dd01353150' /etc/nova/nova.conf
+
+5.修改cinder配置
+# vi /etc/cinder/cinder.conf
+修改enabled_backends,增加一个backend
+enabled_backends = lvmdriver
+↓
+enabled_backends = lvmdriver,ceph
+
+或者执行
+# sed -i 's/^\(enabled_backends = lvmdriver\).*/\1,ceph/g' /etc/cinder/cinder.conf
+
+增加[ceph]段
+cat >>/etc/cinder/cinder.conf <<EOF
+[ceph]
+volume_backend_name=ceph
+volume_driver = cinder.volume.drivers.rbd.RBDDriver
+host=cinder-cluster
+rbd_pool = cinder
+rbd_ceph_conf = /etc/ceph/ceph.conf
+rbd_flatten_volume_from_snapshot = false
+rbd_max_clone_depth = 5
+rbd_store_chunk_size = 8
+rados_connect_timeout = -1
+glance_api_version = 2
+rbd_user = admin
+rbd_secret_uuid = ee2f146c-4a52-49ed-b12b-96dd01353150
+EOF
+
+6.重启服务
+# systemctl restart openstack-nova-compute
+# systemctl restart openstack-cinder-volume
+
+7.绑定volume-type和backend
+cinder type-create --description lvm lvm
+cinder type-create --description ceph ceph
+cinder --os-volume-api-version 3 type-key lvm set volume_backend_name=LVM
+cinder --os-volume-api-version 3 type-key ceph set volume_backend_name=ceph
+cinder extra-specs-list
+
+8.默认配额修改
+cinder quota-class-update --volumes -1 --snapshots -1 --gigabytes -1 default
