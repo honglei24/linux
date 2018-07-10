@@ -20,3 +20,12 @@ svn revert filename
 svn status
 svn diff
 ```
+
+## 提交代码
+```
+svn commit (ci)
+```
+## 诡异问题的解决方法
+```
+svn cleanup
+```
