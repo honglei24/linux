@@ -1,36 +1,37 @@
-#Mysql�����ָ��뼶��
+# Mysql的四种隔离级别
 
-SQL��׼������4����뼶�������޶������������Щ�ı��ǿɼ��ģ���Щ�ǲ��ɼ��ġ�<strong>�ͼ���ĸ��뼶һ��֧�ָ��ߵĲ�����������ӵ�и��͵�ϵͳ����</strong>��
+SQL标准定义了4类隔离级别，用来限定事务内外的哪些改变是可见的，哪些是不可见的。<strong>低级别的隔离级一般支持更高的并发处理，并拥有更低的系统开销</strong>。
 
-## Read Uncommitted����ȡδ�ύ���ݣ�
+## Read Uncommitted（读取未提交内容）
 
-�ڸø��뼶���������񶼿��Կ�������δ�ύ�����ִ�н���������뼶���������ʵ��Ӧ�ã���Ϊ��������Ҳ������������ö��١���ȡδ�ύ�����ݣ�Ҳ����֮Ϊ�����Dirty Read����
+在该隔离级别，所有事务都可以看到其他未提交事务的执行结果。本隔离级别很少用于实际应用，因为它的性能也不比其他级别好多少。读取未提交的数据，也被称之为脏读（Dirty Read）。
 
-## Read Committed����ȡ�ύ���ݣ�
+## Read Committed（读取提交内容）
 
-���Ǵ�������ݿ�ϵͳ��Ĭ�ϸ��뼶�𣨵�����MySQLĬ�ϵģ����������˸���ļ򵥶��壺һ������ֻ�ܿ����Ѿ��ύ���������ĸı䡣���ָ��뼶�� Ҳ֧����ν�Ĳ����ظ�����Nonrepeatable Read������Ϊͬһ���������ʵ���ڸ�ʵ�����������ܻ����µ�commit������ͬһselect���ܷ��ز�ͬ�����
+这是大多数数据库系统的默认隔离级别（但不是MySQL默认的）。它满足了隔离的简单定义：一个事务只能看见已经提交事务所做的改变。这种隔离级别 也支持所谓的不可重复读（Nonrepeatable Read），因为同一事务的其他实例在该实例处理其间可能会有新的commit，所以同一select可能返回不同结果。
 
-## Repeatable Read�����ض���
+## Repeatable Read（可重读）
 
-����MySQL��Ĭ��������뼶����ȷ��ͬһ����Ķ��ʵ���ڲ�����ȡ����ʱ���ῴ��ͬ���������С����������ϣ���ᵼ����һ�����ֵ����⣺�ö� ��Phantom Read�����򵥵�˵���ö�ָ���û���ȡĳһ��Χ��������ʱ����һ���������ڸ÷�Χ�ڲ��������У����û��ٶ�ȡ�÷�Χ��������ʱ���ᷢ�����µġ���Ӱ�� �С�InnoDB��Falcon�洢����ͨ����汾�������ƣ�MVCC��Multiversion Concurrency Control�����ƽ���˸����⡣
+这是MySQL的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。不过理论上，这会导致另一个棘手的问题：幻读 （Phantom Read）。简单的说，幻读指当用户读取某一范围的数据行时，另一个事务又在该范围内插入了新行，当用户再读取该范围的数据行时，会发现有新的“幻影” 行。InnoDB和Falcon存储引擎通过多版本并发控制（MVCC，Multiversion Concurrency Control）机制解决了该问题。
 
-## Serializable���ɴ��л���
+## Serializable（可串行化）
 
-������ߵĸ��뼶����ͨ��ǿ����������ʹ֮�������໥��ͻ���Ӷ�����ö����⡣����֮��������ÿ�������������ϼ��Ϲ���������������𣬿��ܵ��´����ĳ�ʱ�������������
+这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。简言之，它是在每个读的数据行上加上共享锁。在这个级别，可能导致大量的超时现象和锁竞争。
 
-�����ָ��뼶���ȡ��ͬ����������ʵ�֣�����ȡ����ͬһ�����ݵĻ��������׷������⡣���磺
+这四种隔离级别采取不同的锁类型来实现，若读取的是同一个数据的话，就容易发生问题。例如：
 
-<strong>���(Drity Read)</strong>��ĳ�������Ѹ���һ�����ݣ���һ�������ڴ�ʱ��ȡ��ͬһ�����ݣ�����ĳЩԭ��ǰһ��RollBack�˲��������һ����������ȡ�����ݾͻ��ǲ���ȷ�ġ�
+<strong>脏读(Drity Read)</strong>：某个事务已更新一份数据，另一个事务在此时读取了同一份数据，由于某些原因，前一个RollBack了操作，则后一个事务所读取的数据就会是不正确的。
 
-<strong>�����ظ���(Non-repeatable read)</strong>:��һ����������β�ѯ֮�����ݲ�һ�£�����������β�ѯ�����м������һ��������µ�ԭ�е����ݡ�
+<strong>不可重复读(Non-repeatable read)</strong>:在一个事务的两次查询之中数据不一致，这可能是两次查询过程中间插入了一个事务更新的原有的数据。
 
-<strong>�ö�(PhantomRead)</strong>:��һ����������β�ѯ�����ݱ�����һ�£�������һ�������ѯ�˼���(Row)���ݣ�����һ������ȴ�ڴ�ʱ�������µļ������ݣ���ǰ�������ڽ������Ĳ�ѯ�У��ͻᷢ���м�������������ǰ��û�еġ�
+<strong>幻读(PhantomRead)</strong>:在一个事务的两次查询中数据笔数不一致，例如有一个事务查询了几列(Row)数据，而另一个事务却在此时插入了新的几列数据，先前的事务在接下来的查询中，就会发现有几列数据是它先前所没有的。
 
 
-<strong>��MySQL�У�ʵ���������ָ��뼶�𣬷ֱ��п��ܲ�������������ʾ��</strong>
-| ���뼶�� | ��� | �����ظ��� | �ö� |
+<strong>在MySQL中，实现了这四种隔离级别，分别有可能产生问题如下所示：</strong>
+
+| 隔离级别 | 脏读 | 不可重复读 | 幻读 |
 | :--- | :----: | ----: | ----: |
-| δ�ύ����Read uncommitted�� | ���� | ���� | ���� |
-| ���ύ����Read committed��    | ������      | ����     | ���� |
-| ���ظ�����Repeatable read��    | ������      | ������     | ���� |
-| �ɴ��л���Serializable ��    | ������      | ������     | ������ |
+| 未提交读（Read uncommitted） | 可能 | 可能 | 可能 |
+| 已提交读（Read committed）    | 不可能      | 可能     | 可能 |
+| 可重复读（Repeatable read）    | 不可能      | 不可能     | 可能 |
+| 可串行化（Serializable ）    | 不可能      | 不可能     | 不可能 |
