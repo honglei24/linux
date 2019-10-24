@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: log-kafka-dp
+  namespace: elasticsearch 
+spec: 
+  replicas: 2
+  selector:
+    matchLabels:
+      name: log-kafka
+  template: 
+    metadata: 
+      labels: 
+        name: log-kafka
+    spec: 
+      containers: 
+        - name: log-kafka
+          image: log_kafka:0.1 
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+---
+
+apiVersion: v1 
+kind: Service
+metadata: 
+  name: log-kafka-svc 
+  namespace: elasticsearch
+spec: 
+  ports: 
+    - port: 8080
+      name: http
+      targetPort: 8080
+      protocol: TCP 
+  selector: 
+    name: log-kafka
