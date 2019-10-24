@@ -3,7 +3,8 @@
 
 ## 日志传输路径
 
-    
+![image](./img/arch.jpg)
+
 <p>公有云集群模拟环境内的filebeat以deamon形式部署，logstash和log-go以deployment形式部署。
 <br>私有云内的模拟环境目前时以二进制部署。
 </p>
