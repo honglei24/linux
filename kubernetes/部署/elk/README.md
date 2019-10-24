@@ -3,30 +3,16 @@
 
 ## 日志传输路径
 
-- ```mermaid
-    graph LR;
-      subgraph 泰山新村
-        kafka-rest-->kafka-cluster
-        kafka-cluster-->logstash
-        logstash-->elasticsearch
-        elasticsearch-->kibana
-      end
-      subgraph 腾讯云
-        filebeat_ds-->logstash_deploy
-        logstash_deploy-->log-go
-      end
-      log-go-->kafka-rest
-    ```
     
-<p>腾讯云集群模拟环境内的filebeat以deamon形式部署，logstash和log-go以deployment形式部署。
-<br>泰山新村内的模拟环境目前时以二进制部署。
+<p>公有云集群模拟环境内的filebeat以deamon形式部署，logstash和log-go以deployment形式部署。
+<br>私有云内的模拟环境目前时以二进制部署。
 </p>
 
 
 ## 部署手册
 
 
-### 腾讯云
+### 公有云
 
 #### log-go部署
 1. 安装go(步骤省略)
@@ -67,7 +53,7 @@ EOF
 # kubectl create -f filebeat-to-logstash.yaml
 ```
 
-### 泰山新村
+### 私有云
 
 #### kafka-rest部署
 参照[kafka集群部署手册](./kafka集群部署.md)
